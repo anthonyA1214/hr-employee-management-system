@@ -4,13 +4,29 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarHeader,
+    useSidebar,
 } from "@/components/ui/sidebar"
 
+import {
+    LayoutDashboard,
+    Clock,
+    DollarSign,
+    CalendarCheck2,
+    FileText,
+    Archive,
+    Settings,
+    LogOut,
+} from "lucide-react"
+
+import fullLogo from "@/assets/full-logo.svg"
+
 export function AppSidebar() {
+    const { state } = useSidebar();
+
     return (
-        <Sidebar>
+        <Sidebar collapsible="icon" >
             <SidebarHeader className="flex items-center justify-center">
-                <h2 className="text-lg font-bold">App Sidebar</h2>
+                <img src={fullLogo} alt="Full Logo" />
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup />
