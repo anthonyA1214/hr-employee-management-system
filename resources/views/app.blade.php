@@ -12,7 +12,7 @@
     @inertiaHead
 
 </head>
-<body class="font-hanken-grotesk min-h-screen">
+<body class="font-hanken-grotesk">
     @inertia
 </body>
 </html>

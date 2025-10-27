@@ -1,18 +1,20 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { HRAppSidebar } from "@/components/HRAppSidebar"
+import { AppSidebar } from "@/components/AppSidebar"
 
 export default function HRLayout({ children }) {
   return (
     <SidebarProvider>
-      <HRAppSidebar />
-      <main className="w-full bg-E2EDF0">
+      <AppSidebar />
+      <main className="w-full">
         {/* Top bar */}
-        <div className="w-full bg-[#F2F2F2] py-1 border-b">
+        <div className="flex items-center w-full fixed h-12 bg-[#F2F2F2] py-1 border-b px-3">
           <SidebarTrigger />
         </div>
 
         {/* Main content */}
-        {children}
+        <div className="w-full h-full bg-[#E2EDF0] p-5 mt-12">
+          {children}
+        </div>
       </main>
     </SidebarProvider>
   )
