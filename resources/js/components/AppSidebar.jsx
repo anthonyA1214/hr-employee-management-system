@@ -8,8 +8,10 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    useSidebar,
 } from "@/components/ui/sidebar"
+
+import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
 
 import {
     LayoutDashboard,
@@ -23,7 +25,7 @@ import {
     LogOut,
 } from "lucide-react"
 
-import { Link, usePage } from "@inertiajs/react"
+import { Link, usePage, Form } from "@inertiajs/react"
 
 import fullLogo from "@/assets/full-logo.svg"
 
@@ -78,11 +80,13 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon" className="text-[#F2F2F2]">
-            <SidebarHeader className="flex items-center justify-center border-b border-[#747474]">
+            <SidebarHeader className="flex items-center justify-center">
                 <img src={fullLogo} alt="Full Logo" />
             </SidebarHeader>
             <SidebarContent>
-                <SidebarGroup className="border-b border-[#747474]">
+                <Separator className="my-4 bg-[#747474]" />
+
+                <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {mainItems.map((item) => {
@@ -102,6 +106,9 @@ export function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
+
+                <Separator className="my-4 bg-[#747474]" />
+
                 <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>
@@ -123,15 +130,32 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter className="border-t border-[#747474]">
+
+            <Separator className="my-4 bg-[#747474]" />
+            
+            <SidebarFooter>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild className="hover:bg-[#30A1EF] hover:text-[#F2F2F2] active:bg-[#5DB1EB] active:text-[#F2F2F2] text-xl py-5">
-                            <Link href="/logout" className="flex items-center justify-start gap-2">
-                                <LogOut className="w-6 h-6" />
-                                <span>Logout</span>
-                            </Link>
-                        </SidebarMenuButton>
+                        <Form action="/logout" method="POST" className="text-xl">
+                            {({ processing }) => (
+                                <SidebarMenuButton asChild className="hover:bg-[#30A1EF] hover:text-[#F2F2F2] active:bg-[#5DB1EB] active:text-[#F2F2F2] text-xl py-5">   
+                                    <button type="submit" disabled={processing} className="w-full">
+                                        {processing ? (
+                                            <>
+                                                <LogOut />
+                                                <span>Logging out</span>
+                                                <Spinner className="ms-auto" />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <LogOut />
+                                                <span>Log out</span>
+                                            </>
+                                        )}
+                                    </button>
+                                </SidebarMenuButton>
+                            )}
+                        </Form>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>
