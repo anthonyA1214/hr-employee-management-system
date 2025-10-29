@@ -12,8 +12,11 @@ use App\Http\Controllers\HR\TimekeepingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [SessionController::class, 'create'])->name('login');
+Route::post('/login', [SessionController::class, 'store'])->name('login.store');
+Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
-Route::prefix('hr')
+Route::middleware(['auth', 'role:hr'])
+->prefix('hr')
 ->name('hr.')
 ->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
