@@ -11,6 +11,8 @@ use App\Http\Controllers\HR\SettingsController;
 use App\Http\Controllers\HR\TimekeepingController;
 use Illuminate\Support\Facades\Route;
 
+Route::inertia('/', 'LandingPage')->name('landing');
+
 Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');

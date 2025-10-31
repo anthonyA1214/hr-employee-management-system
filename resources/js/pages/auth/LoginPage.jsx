@@ -1,4 +1,8 @@
 import fullLogo from '@/assets/dark-full-logo.svg'
+import {
+    Mail,
+    Lock
+ } from 'lucide-react'
 
 import { Form } from '@inertiajs/react'
 
@@ -9,10 +13,14 @@ import {
     CardHeader, 
 } from "@/components/ui/card"
 
-import { Input } from '@/components/ui/input'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-
 import { Spinner } from "@/components/ui/spinner"
 
 export default function LoginPage() {  
@@ -31,14 +39,24 @@ export default function LoginPage() {
                                     {/* Email */}
                                     <div className="flex flex-col gap-y-2">
                                         <Label htmlFor="email">Email</Label>
-                                        <Input id="email" type="email" name="email" placeholder="m@example.com" required />
+                                        <InputGroup>
+                                            <InputGroupInput id="email" type="email" name="email" placeholder="m@example.com" required />
+                                            <InputGroupAddon>
+                                                <Mail />
+                                            </InputGroupAddon>
+                                        </InputGroup>
                                         {errors.email && (<span className="text-sm text-red-500">{errors.email}</span>)}
                                     </div>  
 
                                     {/* Password */}
                                     <div className="flex flex-col gap-y-2">
                                         <Label htmlFor="password">Password</Label>
-                                        <Input id="password" type="password" name="password" required />
+                                        <InputGroup>
+                                            <InputGroupInput id="password" type="password" name="password" required />
+                                            <InputGroupAddon>
+                                                <Lock />
+                                            </InputGroupAddon>
+                                        </InputGroup>
                                         {errors.password && (<span className="text-sm text-red-500">{errors.password}</span>)}
                                     </div>              
                                 </div>
