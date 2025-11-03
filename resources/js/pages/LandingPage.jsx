@@ -3,5 +3,5 @@ export default function LandingPage() {
         <>
             <h1>LandingPage</h1>
         </>
-    )
+    );
 }

@@ -24,96 +24,96 @@ Lightweight HR & Employee Management System built with Laravel (backend), React 
 
 - General UI: route/sift users to HR dashboard, Employee landing page, or Guest contact/login
 - HR Staff features
-	- Send memo (input form). Model: Memo.php
-	- Applicant queue (table view, separate page). Per applicant: Name, email, date sent, view details, delete. One-week auto-clean option. Model: Applicant.php
-	- Timekeeping: record time-in / time-out, late flags, table view. Model: Timekeeping.php
-	- Overtime handling and payroll integration. Model: Payroll.php
-	- Approve/decline leaves (with mandatory rules for maternity/paternity). Leave history and tracking. Model: Leave.php
-	- Salary calculation based on attendance, overtime, and deductions (tardiness, taxes by percentage). Payroll computation page and employee-facing payroll tab. Model: Payroll.php
-	- Optional: handle complaints from employees (Complaint.php)
-	- Notifications: resignation triggers HR notification (30 days)
+    - Send memo (input form). Model: Memo.php
+    - Applicant queue (table view, separate page). Per applicant: Name, email, date sent, view details, delete. One-week auto-clean option. Model: Applicant.php
+    - Timekeeping: record time-in / time-out, late flags, table view. Model: Timekeeping.php
+    - Overtime handling and payroll integration. Model: Payroll.php
+    - Approve/decline leaves (with mandatory rules for maternity/paternity). Leave history and tracking. Model: Leave.php
+    - Salary calculation based on attendance, overtime, and deductions (tardiness, taxes by percentage). Payroll computation page and employee-facing payroll tab. Model: Payroll.php
+    - Optional: handle complaints from employees (Complaint.php)
+    - Notifications: resignation triggers HR notification (30 days)
 
 - Employee features
-	- Submit leave requests (dropdown of types: special, emergency, personal, sick, paternity (7 days mandatory), maternity (105 days mandatory)), view remaining leaves (sick/personal allocation e.g., 15 days each per year)
-	- Submit complaints/concerns
-	- View payroll, pay computations, and attendance records
-	- Resignation submission (optional) which notifies HR
+    - Submit leave requests (dropdown of types: special, emergency, personal, sick, paternity (7 days mandatory), maternity (105 days mandatory)), view remaining leaves (sick/personal allocation e.g., 15 days each per year)
+    - Submit complaints/concerns
+    - View payroll, pay computations, and attendance records
+    - Resignation submission (optional) which notifies HR
 
 - Guest features
-	- Contact HR form (simple input -> opens Gmail or sends using configured mail driver)
-	- Request appointment (sends confirmation email to applicant and HR; CV/resume upload optional)
+    - Contact HR form (simple input -> opens Gmail or sends using configured mail driver)
+    - Request appointment (sends confirmation email to applicant and HR; CV/resume upload optional)
 
 ## Recommended data models (DB tables)
 
 Below are suggested Eloquent model names and core attributes. Implement as needed and expand with relations and indices.
 
 - users (User.php)
-	- id, name, email, password, role (enum: hr|employee|guest), position, hired_at, created_at, updated_at
+    - id, name, email, password, role (enum: hr|employee|guest), position, hired_at, created_at, updated_at
 
 - memos (Memo.php)
-	- id, hr_id (user), subject, body, sent_at, created_at, updated_at
+    - id, hr_id (user), subject, body, sent_at, created_at, updated_at
 
 - applicants (Applicant.php)
-	- id, name, email, phone, cv_path (nullable), applied_at, status (pending|accepted|rejected), hr_notes, created_at, updated_at
+    - id, name, email, phone, cv_path (nullable), applied_at, status (pending|accepted|rejected), hr_notes, created_at, updated_at
 
 - timekeepings (Timekeeping.php)
-	- id, user_id, date, time_in, time_out, late_minutes, overtime_minutes, notes, created_at, updated_at
+    - id, user_id, date, time_in, time_out, late_minutes, overtime_minutes, notes, created_at, updated_at
 
 - leaves (Leave.php)
-	- id, user_id, type, start_date, end_date, days, status (pending|approved|declined), reason, created_at, updated_at
+    - id, user_id, type, start_date, end_date, days, status (pending|approved|declined), reason, created_at, updated_at
 
 - payrolls (Payroll.php)
-	- id, user_id, period_start, period_end, base_salary, overtime_pay, deductions, tax_percentage, net_pay, created_at, updated_at
+    - id, user_id, period_start, period_end, base_salary, overtime_pay, deductions, tax_percentage, net_pay, created_at, updated_at
 
 - complaints (Complaint.php)
-	- id, user_id, type, subject, description, status, created_at, updated_at
+    - id, user_id, type, subject, description, status, created_at, updated_at
 
 - appointments (Appointment.php)
-	- id, name, email, scheduled_at, hr_assignee_id, status, notes, created_at, updated_at
+    - id, name, email, scheduled_at, hr_assignee_id, status, notes, created_at, updated_at
 
 - resignations (Resignation.php)
-	- id, user_id, notice_date, effective_date, reason, created_at, updated_at
+    - id, user_id, notice_date, effective_date, reason, created_at, updated_at
 
 Notes: add pivot tables for many-to-many relationships if needed. Use soft deletes where applicable.
 
 ## Routes and file map (suggested)
 
 - web.php (routes)
-	- /login, /logout
-	- /hr/* -> HR dashboard routes (memos, applicants, timekeeping, payroll, leaves)
-	- /employee/* -> Employee landing and features (leave request, payroll view)
-	- /guest/* -> Contact, appointment, resume upload
+    - /login, /logout
+    - /hr/\* -> HR dashboard routes (memos, applicants, timekeeping, payroll, leaves)
+    - /employee/\* -> Employee landing and features (leave request, payroll view)
+    - /guest/\* -> Contact, appointment, resume upload
 
 - Controllers (Laravel)
-	- app/Http/Controllers/AuthController.php (login/logout)
-	- app/Http/Controllers/HR/MemoController.php
-	- app/Http/Controllers/HR/ApplicantController.php
-	- app/Http/Controllers/HR/TimekeepingController.php
-	- app/Http/Controllers/HR/PayrollController.php
-	- app/Http/Controllers/HR/LeaveController.php
-	- app/Http/Controllers/Employee/RequestController.php
-	- app/Http/Controllers/Guest/AppointmentController.php
+    - app/Http/Controllers/AuthController.php (login/logout)
+    - app/Http/Controllers/HR/MemoController.php
+    - app/Http/Controllers/HR/ApplicantController.php
+    - app/Http/Controllers/HR/TimekeepingController.php
+    - app/Http/Controllers/HR/PayrollController.php
+    - app/Http/Controllers/HR/LeaveController.php
+    - app/Http/Controllers/Employee/RequestController.php
+    - app/Http/Controllers/Guest/AppointmentController.php
 
 - Models
-	- app/Models/User.php
-	- app/Models/Memo.php
-	- app/Models/Applicant.php
-	- app/Models/Timekeeping.php
-	- app/Models/Leave.php
-	- app/Models/Payroll.php
-	- app/Models/Complaint.php
+    - app/Models/User.php
+    - app/Models/Memo.php
+    - app/Models/Applicant.php
+    - app/Models/Timekeeping.php
+    - app/Models/Leave.php
+    - app/Models/Payroll.php
+    - app/Models/Complaint.php
 
 - Frontend (React + Inertia)
-	- resources/js/Pages/HR/Dashboard.jsx
-	- resources/js/Pages/HR/Applicants.jsx
-	- resources/js/Pages/HR/Memos/NewMemo.jsx
-	- resources/js/Pages/HR/Timekeeping.jsx
-	- resources/js/Pages/HR/Payroll.jsx
-	- resources/js/Pages/Employee/Landing.jsx
-	- resources/js/Pages/Employee/Payroll.jsx
-	- resources/js/Pages/Guest/Contact.jsx
-	- resources/js/layouts/* (shared page layouts and wrappers)
-	- resources/js/components/* (shared UI components)
+    - resources/js/Pages/HR/Dashboard.jsx
+    - resources/js/Pages/HR/Applicants.jsx
+    - resources/js/Pages/HR/Memos/NewMemo.jsx
+    - resources/js/Pages/HR/Timekeeping.jsx
+    - resources/js/Pages/HR/Payroll.jsx
+    - resources/js/Pages/Employee/Landing.jsx
+    - resources/js/Pages/Employee/Payroll.jsx
+    - resources/js/Pages/Guest/Contact.jsx
+    - resources/js/layouts/\* (shared page layouts and wrappers)
+    - resources/js/components/\* (shared UI components)
 
 ## Business rules / acceptance notes
 
@@ -125,6 +125,7 @@ Notes: add pivot tables for many-to-many relationships if needed. Use soft delet
 ## Setup & development (local)
 
 Prerequisites:
+
 - PHP 8.1+ with required extensions
 - Composer
 - Node.js 18+ and npm or yarn
@@ -199,4 +200,5 @@ If you'd like, I can scaffold the migrations, models and basic controllers next 
 For questions about setup or architecture decisions, open an issue or message the project owner.
 
 ---
+
 Generated based on the feature list you provided. Use this README as the central spec while we implement features incrementally.

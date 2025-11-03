@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('deductions', 10, 2)->default(0);
             $table->decimal('tax_percentage', 5, 2)->default(0);
             $table->decimal('net_pay', 10, 2)->default(0);
+            $table->enum('status', ['pending', 'paid'])->default('pending');
             $table->timestamps();
         });
     }

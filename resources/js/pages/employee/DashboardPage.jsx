@@ -16,18 +16,11 @@ import {
     CircleCheckBig,
     Check,
     X,
+    CalendarDays,
+    Hourglass,
 } from "lucide-react";
 
-const employeeColumns = [
-    { key: "name", label: "Name" },
-    { key: "email", label: "Email" },
-    { key: "position", label: "Position" },
-    { key: "department", label: "Department" },
-    { key: "status", label: "Status" },
-];
-
 const payrollColumns = [
-    { key: "name", label: "Name" },
     { key: "period_start", label: "Period Start" },
     { key: "period_end", label: "Period End" },
     { key: "basic_salary", label: "Basic Salary" },
@@ -45,9 +38,16 @@ const leaveRequestColumns = [
     { key: "reason", label: "Reason" },
 ];
 
-const employeeData = [];
+const memosColumns = [
+    { key: "issued_by", label: "Issued By" },
+    { key: "subject", label: "Subject" },
+    { key: "date_sent", label: "Date Sent" },
+    { key: "content", label: "Content" },
+];
+
 const payrollData = [];
 const leaveRequestData = [];
+const memosData = [];
 
 export default function DashboardPage() {
     return (
@@ -57,43 +57,41 @@ export default function DashboardPage() {
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-8">
                     <DashboardCard
-                        icon={UsersRound}
-                        value="172"
-                        label="Total Employees"
+                        icon={CalendarDays}
+                        value="15"
+                        label="Leave Balance"
                     />
                     <DashboardCard
-                        icon={UserCheck2}
-                        value="128"
-                        label="Active Users"
-                    />
-                    <DashboardCard
-                        icon={CalendarCheck2}
-                        value="12"
+                        icon={Hourglass}
+                        value="2"
                         label="Pending Leave Request"
                     />
                     <DashboardCard
+                        icon={CircleCheckBig}
+                        value="4"
+                        label="Approve Leaves"
+                    />
+                    <DashboardCard
                         icon={FileText}
-                        value="17"
+                        value="1"
                         label="Total Memos"
                     />
                 </div>
 
                 <div className="flex flex-col gap-y-4">
                     <h1 className="text-3xl font-bold">Quick Access</h1>
-                    <Tabs defaultValue="employees">
+                    <Tabs defaultValue="payroll">
                         <TabsList>
-                            <TabsTrigger value="employees">
-                                Employees
-                            </TabsTrigger>
                             <TabsTrigger value="payroll">Payroll</TabsTrigger>
                             <TabsTrigger value="leave-requests">
                                 Leave Requests
                             </TabsTrigger>
+                            <TabsTrigger value="memos">Memos</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="employees">
+                        <TabsContent value="payroll">
                             <DataTable
-                                columns={employeeColumns}
-                                data={employeeData}
+                                columns={payrollColumns}
+                                data={payrollData}
                                 actions={(row) => (
                                     <>
                                         <Button
@@ -114,10 +112,10 @@ export default function DashboardPage() {
                                 )}
                             />
                         </TabsContent>
-                        <TabsContent value="payroll">
+                        <TabsContent value="leave-requests">
                             <DataTable
-                                columns={payrollColumns}
-                                data={payrollData}
+                                columns={leaveRequestColumns}
+                                data={leaveRequestData}
                                 actions={(row) => (
                                     <>
                                         <Button
@@ -138,10 +136,10 @@ export default function DashboardPage() {
                                 )}
                             />
                         </TabsContent>
-                        <TabsContent value="leave-requests">
+                        <TabsContent value="memos">
                             <DataTable
-                                columns={leaveRequestColumns}
-                                data={leaveRequestData}
+                                columns={memosColumns}
+                                data={memosData}
                                 actions={(row) => (
                                     <>
                                         <Button

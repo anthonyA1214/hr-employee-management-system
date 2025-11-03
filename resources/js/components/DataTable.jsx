@@ -1,13 +1,13 @@
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
-export default function DataTable({columns, data, actions}) {
+export default function DataTable({ columns, data, actions }) {
     return (
         <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
             <Table>
@@ -16,13 +16,20 @@ export default function DataTable({columns, data, actions}) {
                         {columns.map((col) => (
                             <TableHead key={col.key}>{col.label}</TableHead>
                         ))}
-                        {actions && <TableHead className="text-center text-white">Actions</TableHead>}
+                        {actions && (
+                            <TableHead className="text-center text-white">
+                                Actions
+                            </TableHead>
+                        )}
                     </TableRow>
                 </TableHeader>
                 <TableBody className="bg-white">
                     {data.length === 0 ? (
                         <TableRow>
-                            <TableCell colSpan={columns.length + (actions ? 1 : 0)} className="text-center py-4 text-gray-500">
+                            <TableCell
+                                colSpan={columns.length + (actions ? 1 : 0)}
+                                className="text-center py-4 text-gray-500"
+                            >
                                 No data to show
                             </TableCell>
                         </TableRow>
@@ -34,7 +41,9 @@ export default function DataTable({columns, data, actions}) {
                                         {col.key === "status" ? (
                                             <span
                                                 className={`px-3 py-1 text-sm rounded-full font-medium text-white ${
-                                                    row.status === "Active" ? "bg-[#41D56D]" : "bg-[#FF0000]"
+                                                    row.status === "Active"
+                                                        ? "bg-[#41D56D]"
+                                                        : "bg-[#FF0000]"
                                                 }`}
                                             >
                                                 {row.status}
@@ -42,12 +51,16 @@ export default function DataTable({columns, data, actions}) {
                                         ) : (
                                             row[col.key]
                                         )}
-                                    </TableCell>                     
+                                    </TableCell>
                                 ))}
-                                {actions && <TableCell className="text-center">{actions(row)}</TableCell>}
+                                {actions && (
+                                    <TableCell className="text-center">
+                                        {actions(row)}
+                                    </TableCell>
+                                )}
                             </TableRow>
-                        )
-                    ))}
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </div>

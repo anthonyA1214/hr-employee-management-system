@@ -55,4 +55,32 @@ class EmployeesController extends Controller
 
         return redirect()->route('hr.employees');
     }
+
+    public function update(Request $request, $id)
+    {
+        $employee = User::findOrFail($id);
+
+        $validatedAttributes = $request->validate([
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $employee->id],
+            'contact_number' => ['required', 'string', 'max:15'],
+            'position' => ['required', 'string', 'max:100'],
+            'department' => ['required', 'string', 'max:100'],
+            'hired_at' => ['required', 'date'],
+            'address' => ['required', 'string', 'max:255'],
+        ]);
+
+        $employee->update($validatedAttributes);
+
+        return redirect()->route('hr.employees');
+    }
+
+    public function destroy($id)
+    {
+        $employee = User::findOrFail($id);
+        $employee->delete();
+
+        return redirect()->route('hr.employees');
+    }
 }

@@ -1,9 +1,8 @@
-import DataTable from "@/components/DataTable";
-import SendMemoDialog from "@/components/SendMemoDialog";
 import Layout from "@/layouts/Layout";
+import DataTable from "@/components/DataTable";
 
 const memosColumns = [
-    { key: "name", label: "Name" },
+    { key: "issued_by", label: "Issued By" },
     { key: "subject", label: "Subject" },
     { key: "date_sent", label: "Date Sent" },
     { key: "content", label: "Content" },
@@ -15,10 +14,7 @@ export default function MemosPage() {
     return (
         <>
             <div className="space-y-4">
-                <div className="flex justify-between">
-                    <h1 className="text-3xl font-bold">Memo Management</h1>
-                    <SendMemoDialog />
-                </div>
+                <h1 className="text-3xl font-bold">Memos</h1>
 
                 <DataTable columns={memosColumns} data={memosData} />
             </div>
