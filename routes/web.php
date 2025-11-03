@@ -22,11 +22,19 @@ Route::middleware(['auth', 'role:hr'])
 ->name('hr.')
 ->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/employees', [EmployeesController::class, 'index'])->name('employees');
+    Route::post('/employees/add', [EmployeesController::class, 'store'])->name('employees.add');
+
     Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll');
+
     Route::get('/timekeeping', [TimekeepingController::class, 'index'])->name('timekeeping');
+
     Route::get('/memos', [MemosController::class, 'index'])->name('memos');
+
     Route::get('/leave-requests', [LeaveRequestsController::class, 'index'])->name('leave-requests');
+
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+
     Route::get('/archive', [ArchiveController::class, 'index'])->name('archive');
 });

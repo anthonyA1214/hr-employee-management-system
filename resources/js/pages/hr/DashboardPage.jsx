@@ -50,60 +50,59 @@ const leaveRequestColumns = [
   { key: "reason", label: "Reason" },
 ]
 
-// const data = [
-//   {
-//     id: 1,
-//     first_name: "Rich Mae",
-//     last_name: "Oredeña",
-//     email: "oredenarichmae@gmail.com",
-//     position: "Employee",
-//     department: "IT Department",
-//     status: "Active",
-//   },
-//   {
-//     id: 2,
-//     first_name: "Anthony",
-//     last_name: "Amiluddin",
-//     email: "amiluddinanthony@gmail.com",
-//     position: "Manager",
-//     department: "IT Department",
-//     status: "Active",
-//   },
-//   {
-//     id: 3,
-//     first_name: "Marvin",
-//     last_name: "Felices",
-//     email: "felicesmarvin@gmail.com",
-//     position: "Assistant",
-//     department: "Finance Department",
-//     status: "Inactive",
-//   },
-//   {
-//     id: 4,
-//     first_name: "Rahiem Lebh",
-//     last_name: "Reyel",
-//     email: "rahiemreyel@gmail.com",
-//     position: "Supervisor",
-//     department: "HR Department",
-//     status: "Active",
-//   },
-//   {
-//     id: 5,
-//     first_name: "Louiege",
-//     last_name: "Tabago",
-//     email: "tabagolouiege@gmail.com",
-//     position: "Intern",
-//     department: "IT Department",
-//     status: "On Leave",
-//   },
-// ];
+const data = [
+  {
+    id: 1,
+    first_name: "Rich Mae",
+    last_name: "Oredeña",
+    email: "oredenarichmae@gmail.com",
+    position: "Employee",
+    department: "IT Department",
+    status: "Active",
+  },
+  {
+    id: 2,
+    first_name: "Anthony",
+    last_name: "Amiluddin",
+    email: "amiluddinanthony@gmail.com",
+    position: "Manager",
+    department: "IT Department",
+    status: "Active",
+  },
+  {
+    id: 3,
+    first_name: "Marvin",
+    last_name: "Felices",
+    email: "felicesmarvin@gmail.com",
+    position: "Assistant",
+    department: "Finance Department",
+    status: "Inactive",
+  },
+  {
+    id: 4,
+    first_name: "Rahiem Lebh",
+    last_name: "Reyel",
+    email: "rahiemreyel@gmail.com",
+    position: "Supervisor",
+    department: "HR Department",
+    status: "Active",
+  },
+  {
+    id: 5,
+    first_name: "Louiege",
+    last_name: "Tabago",
+    email: "tabagolouiege@gmail.com",
+    position: "Intern",
+    department: "IT Department",
+    status: "On Leave",
+  },
+];
 
-// const employeeData = data.map(emp => ({
-//     ...emp,
-//     name: `${emp.last_name}, ${emp.first_name}`
-// }));
+const employeeData = data.map(emp => ({
+    ...emp,
+    name: `${emp.last_name}, ${emp.first_name}`
+}));
 
-const employeeData = []
 const payrollData = []
 const leaveRequestData = []
 

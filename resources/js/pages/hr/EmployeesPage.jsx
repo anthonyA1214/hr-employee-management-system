@@ -1,9 +1,12 @@
 import HRLayout from "@/layouts/HRLayout";
+import { useState } from "react";
+import { usePage } from "@inertiajs/react";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group"
+import EditEmployeeDialog from "@/components/EditEmployeeDialog";
 import AddNewEmployeeDialog from "@/components/AddNewEmployeeDialog";
 import {
     Select,
@@ -15,20 +18,35 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { Search } from "lucide-react";
+import { PenSquare, Search, Trash2 } from "lucide-react";
 import DataTable from "@/components/DataTable"
 
 const employeeColumns = [
-  { key: "name", label: "Name" },
-  { key: "email", label: "Email" },
-  { key: "position", label: "Position" },
-  { key: "department", label: "Department" },
-  { key: "status", label: "Status" },
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "contact_number", label: "Contact Number" },
+    { key: "position", label: "Position" },
+    { key: "department", label: "Department" },
+    { key: "hired_at", label: "Hired At" },
+    { key: "address", label: "Address" },
+    { key: "status", label: "Status" },
 ]
 
-const employeeData = []
-
 export default function EmployeesPage() {
+    const { employees } = usePage().props;
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+    const openEditDialog = (employee) => {
+        setSelectedEmployee(employee);
+        setIsEditDialogOpen(true);
+    }
+
+    const closeEditDialog = () => {
+        setSelectedEmployee(null);
+        setIsEditDialogOpen(false);
+    }
+    
     return (
         <>
             <div className="space-y-4">
@@ -63,9 +81,9 @@ export default function EmployeesPage() {
                     <Button type="submit" className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]">Search</Button>
                 </div>
 
-                <DataTable columns={employeeColumns} data={employeeData} actions={(row) => (
+                <DataTable columns={employeeColumns} data={employees} actions={(row) => (
                     <>
-                        <Button onClick={() => editEmployee(row.id)} className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"> 
+                        <Button onClick={() => openEditDialog(row)} className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"> 
                             <PenSquare /> 
                         </Button> 
                         <Button onClick={() => deleteEmployee(row.id)} className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"> 
@@ -73,6 +91,15 @@ export default function EmployeesPage() {
                         </Button>
                     </>
                 )}/>
+
+                {selectedEmployee && (
+                    <EditEmployeeDialog
+                        open={isEditDialogOpen}
+                        onOpenChange={setIsEditDialogOpen}
+                        employee={selectedEmployee}
+                        onClose={closeEditDialog}
+                    />
+                )}
             </div>      
         </>
     )

@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useEffect } from "react";
 import {
     Dialog,
     DialogClose,
@@ -7,86 +6,72 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
-import { UserRoundPlus } from "lucide-react";
-import { useForm } from '@inertiajs/react'
+import { Button } from "@/components/ui/button"
+import { useForm } from "@inertiajs/react"
 
-export default function AddNewEmployeeDialog() {
-    const [open, setOpen] = useState(false);
-
-    const { data, setData, post, processing, errors, reset } = useForm({
-        first_name: '',
-        last_name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-        contact_number: '',
-        position: '',
-        department: '',
-        hired_at: '',
-        address: '',
+export default function EditEmployeeDialog({ open, onOpenChange, employee, onClose }) {
+    const { data, setData, put, processing, errors } = useForm({
+        first_name: employee ? employee.first_name : '',
+        last_name: employee ? employee.last_name : '',
+        email: employee ? employee.email : '',
+        contact_number: employee ? employee.contact_number : '',
+        position: employee ? employee.position : '',
+        department: employee ? employee.department : '',
+        hired_at: employee ? employee.hired_at : '',
+        address: employee ? employee.address : '',
     });
+
+    useEffect(() => {
+        if (employee) {
+            setData({
+                first_name: employee.first_name || '',
+                last_name: employee.last_name || '',
+                email: employee.email || '',
+                contact_number: employee.contact_number || '',
+                position: employee.position || '',
+                department: employee.department || '',
+                hired_at: employee.hired_at || '',
+                address: employee.address || '',
+            });
+        }
+    }, [employee]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/hr/employees/add', {
+        put(`/hr/employees/edit/${employee.id}`, {
             onSuccess: () => {
-                setOpen(false);
-                reset();
+                onClose();
             }
         });
     }
+
+    if (!employee) return null;
+
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]">
-                    <UserRoundPlus />
-                    Add Employee
-                </Button>
-            </DialogTrigger>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl">Add New Employee</DialogTitle>
+                        <DialogTitle className="text-2xl">Edit Employee</DialogTitle>
                         <div className="border-b-2 border-[#8EC5EE]"></div>
                     </DialogHeader>
-                    <div className="grid grid-cols-2 gap-4">
+                   <div className="grid grid-cols-2 gap-4">
+                        {/* First name */}
                         <div className="flex flex-col gap-y-2">
                             <Label htmlFor="first_name">First name</Label>
                             <Input id="first_name" type="text" placeholder="e.g. John" value={data.first_name} onChange={(e) => setData('first_name', e.target.value)} required />
                             {errors.first_name && (<span className="text-sm text-red-500">{errors.first_name}</span>)}
                         </div>
+
+                        {/* Last name */}
                         <div className="flex flex-col gap-y-2">
                             <Label htmlFor="last_name">Last name</Label>
                             <Input id="last_name" type="text" placeholder="e.g. Doe" value={data.last_name} onChange={(e) => setData('last_name', e.target.value)} required />
                             {errors.last_name && (<span className="text-sm text-red-500">{errors.last_name}</span>)}
-                        </div>
-                    </div>
-
-                    {/* Email */}
-                    <div className="flex flex-col gap-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="m@example.com" value={data.email} onChange={(e) => setData('email', e.target.value)} required />
-                        {errors.email && (<span className="text-sm text-red-500">{errors.email}</span>)}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        {/* Password */}
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" value={data.password} onChange={(e) => setData('password', e.target.value)} required />
-                            {errors.password && (<span className="text-sm text-red-500">{errors.password}</span>)}
-                        </div>
-
-                        {/* Confirm Password */}
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="password_confirmation">Confirm password</Label>
-                            <Input id="password_confirmation" type="password" value={data.password_confirmation} onChange={(e) => setData('password_confirmation', e.target.value)} required />
-                            {errors.password_confirmation && (<span className="text-sm text-red-500">{errors.password_confirmation}</span>)}
                         </div>
 
                         {/* Contact number */}
@@ -130,7 +115,7 @@ export default function AddNewEmployeeDialog() {
                             <Button variant="outline">Cancel</Button>
                         </DialogClose>
                         <Button type="submit" disabled={processing} className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]">
-                            {processing ? (<><Spinner /> Creating...</>) : 'Create'}
+                            {processing ? (<><Spinner /> Editing...</>) : 'Edit'}
                         </Button>
                     </DialogFooter>
                 </form>

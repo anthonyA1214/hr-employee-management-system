@@ -17,10 +17,12 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('role', ['hr', 'employee'])->default('employee');
+            $table->string('contact_number');
             $table->string('position');
             $table->string('department');
             $table->date('hired_at');
+            $table->text('address');
+            $table->enum('role', ['hr', 'employee'])->default('employee');
             $table->string('profile_photo_path')->nullable();
             $table->timestamps();
         });
