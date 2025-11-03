@@ -27,12 +27,14 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'password' => static::$password ??= Hash::make('password'),
-            'role' => fake()->randomElement(['hr', 'employee']),
+            'password' => static::$password ??= Hash::make('anthony270'),
+            'contact_number' => fake()->phoneNumber(),
             'position' => fake()->jobTitle(),
             'department' => fake()->randomElement(['Sales', 'Marketing', 'Development', 'HR', 'Finance']),
             'hired_at' => fake()->date(),
+            'address' => fake()->address(),
             'profile_photo_path' => null,
+            'role' => fake()->randomElement(['hr', 'employee']),
         ];
     }
 

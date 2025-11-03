@@ -1,10 +1,6 @@
-import { 
-    Card, 
-    CardContent, 
-    CardHeader, 
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-export default function DashboardCard({icon: Icon, value, label}) {
+export default function DashboardCard({ icon: Icon, value, label }) {
     return (
         <>
             <Card>
@@ -16,10 +12,10 @@ export default function DashboardCard({icon: Icon, value, label}) {
                 <CardContent>
                     <div className="flex flex-col gap-y-3">
                         <span className="text-4xl">{value}</span>
-                        <span className="opacity-50">{label}</span>   
+                        <span className="opacity-50">{label}</span>
                     </div>
                 </CardContent>
             </Card>
         </>
-    )
+    );
 }

@@ -1,21 +1,26 @@
-import fullLogo from '@/assets/dark-full-logo.svg'
+import fullLogo from "@/assets/dark-full-logo.svg";
+import { Mail, Lock } from "lucide-react";
 
-import { Form } from '@inertiajs/react'
+import { Form } from "@inertiajs/react";
 
-import { 
-    Card, 
-    CardContent, 
-    CardFooter, 
-    CardHeader, 
-} from "@/components/ui/card"
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+} from "@/components/ui/card";
 
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+} from "@/components/ui/input-group";
 
-import { Spinner } from "@/components/ui/spinner"
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
-export default function LoginPage() {  
+export default function LoginPage() {
     return (
         <>
             <main className="flex items-center justify-center bg-[#062745] min-h-screen">
@@ -26,27 +31,66 @@ export default function LoginPage() {
                                 <img src={fullLogo} className="w-36" />
                             </CardHeader>
                             <CardContent>
-                                
                                 <div className="flex flex-col gap-6">
                                     {/* Email */}
                                     <div className="flex flex-col gap-y-2">
                                         <Label htmlFor="email">Email</Label>
-                                        <Input id="email" type="email" name="email" placeholder="m@example.com" required />
-                                        {errors.email && (<span className="text-sm text-red-500">{errors.email}</span>)}
-                                    </div>  
+                                        <InputGroup>
+                                            <InputGroupInput
+                                                id="email"
+                                                type="email"
+                                                name="email"
+                                                placeholder="m@example.com"
+                                                required
+                                            />
+                                            <InputGroupAddon>
+                                                <Mail />
+                                            </InputGroupAddon>
+                                        </InputGroup>
+                                        {errors.email && (
+                                            <span className="text-sm text-red-500">
+                                                {errors.email}
+                                            </span>
+                                        )}
+                                    </div>
 
                                     {/* Password */}
                                     <div className="flex flex-col gap-y-2">
-                                        <Label htmlFor="password">Password</Label>
-                                        <Input id="password" type="password" name="password" required />
-                                        {errors.password && (<span className="text-sm text-red-500">{errors.password}</span>)}
-                                    </div>              
+                                        <Label htmlFor="password">
+                                            Password
+                                        </Label>
+                                        <InputGroup>
+                                            <InputGroupInput
+                                                id="password"
+                                                type="password"
+                                                name="password"
+                                                required
+                                            />
+                                            <InputGroupAddon>
+                                                <Lock />
+                                            </InputGroupAddon>
+                                        </InputGroup>
+                                        {errors.password && (
+                                            <span className="text-sm text-red-500">
+                                                {errors.password}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
-                                
                             </CardContent>
                             <CardFooter>
-                                <Button type="submit" disabled={processing} className="w-full bg-[#052743] hover:bg-[#365065] active:bg-[#647888]">
-                                    {processing ? (<><Spinner /> Logging in...</>) : 'Log in'}
+                                <Button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="w-full bg-[#052743] hover:bg-[#365065] active:bg-[#647888]"
+                                >
+                                    {processing ? (
+                                        <>
+                                            <Spinner /> Logging in...
+                                        </>
+                                    ) : (
+                                        "Log in"
+                                    )}
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -54,5 +98,5 @@ export default function LoginPage() {
                 </Form>
             </main>
         </>
-    )
+    );
 }

@@ -1,6 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\SessionController;
+use App\Http\Controllers\Employee\ArchiveController as EmployeeArchiveController;
+use App\Http\Controllers\Employee\DashboardController as EmployeeDashboardController;
+use App\Http\Controllers\Employee\LeaveRequestsController as EmployeeLeaveRequestsController;
+use App\Http\Controllers\Employee\MemosController as EmployeeMemosController;
+use App\Http\Controllers\Employee\PayrollController as EmployeePayrollController;
+use App\Http\Controllers\Employee\SettingsController as EmployeeSettingsController;
+use App\Http\Controllers\Employee\TimekeepingController as EmployeeTimekeepingController;
 use App\Http\Controllers\HR\ArchiveController;
 use App\Http\Controllers\HR\DashboardController;
 use App\Http\Controllers\HR\EmployeesController;
@@ -11,8 +18,14 @@ use App\Http\Controllers\HR\SettingsController;
 use App\Http\Controllers\HR\TimekeepingController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/login', [SessionController::class, 'create'])->name('login');
-Route::post('/login', [SessionController::class, 'store'])->name('login.store');
+Route::inertia('/', 'LandingPage')->name('landing');
+
+Route::middleware('guest')
+->group(function () {
+    Route::get('/login', [SessionController::class, 'create'])->name('login');
+    Route::post('/login', [SessionController::class, 'store'])->name('login.store');
+});
+
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
 Route::middleware(['auth', 'role:hr'])
@@ -20,11 +33,40 @@ Route::middleware(['auth', 'role:hr'])
 ->name('hr.')
 ->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/employees', [EmployeesController::class, 'index'])->name('employees');
+    Route::post('/employees/add', [EmployeesController::class, 'store'])->name('employees.add');
+    Route::put('/employees/edit/{id}', [EmployeesController::class, 'update'])->name('employees.edit');
+    Route::delete('/employees/delete/{id}', [EmployeesController::class, 'destroy'])->name('employees.delete');
+
     Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll');
+
     Route::get('/timekeeping', [TimekeepingController::class, 'index'])->name('timekeeping');
+
     Route::get('/memos', [MemosController::class, 'index'])->name('memos');
+
     Route::get('/leave-requests', [LeaveRequestsController::class, 'index'])->name('leave-requests');
+
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+
     Route::get('/archive', [ArchiveController::class, 'index'])->name('archive');
+});
+
+Route::middleware(['auth', 'role:employee'])
+->prefix('employee')
+->name('employee.')
+->group(function () {
+    Route::get('/dashboard', [EmployeeDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/payroll', [EmployeePayrollController::class, 'index'])->name('payroll');
+
+    Route::get('/timekeeping', [EmployeeTimekeepingController::class, 'index'])->name('timekeeping');
+
+    Route::get('/memos', [EmployeeMemosController::class, 'index'])->name('memos');
+
+    Route::get('/leave-requests', [EmployeeLeaveRequestsController::class, 'index'])->name('leave-requests');
+
+    Route::get('/settings', [EmployeeSettingsController::class, 'index'])->name('settings');
+
+    Route::get('/archive', [EmployeeArchiveController::class, 'index'])->name('archive');
 });
