@@ -1,4 +1,5 @@
 import { useState } from "react";
+<<<<<<< HEAD
 import { StickyNote } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,14 @@ import DataTable from "@/components/DataTable";
 import SendMemoDialog from "@/components/SendMemoDialog";
 import ViewMemoDialog from "@/components/ViewMemoDialog";
 import Layout from "@/layouts/Layout";
+=======
+import DataTable from "@/components/DataTable";
+import SendMemoDialog from "@/components/SendMemoDialog";
+import Layout from "@/layouts/Layout";
+import { Button } from "@/components/ui/button";
+import { StickyNote } from "lucide-react";
+import ViewMemoDialog from "@/components/ViewMemoDialog";
+>>>>>>> main
 
 const memosColumns = [
     { key: "name", label: "Name" },
@@ -58,4 +67,8 @@ export default function MemosPage({ employees, memosData }) {
     );
 }
 
+<<<<<<< HEAD
 MemosPage.layout = (page) => <Layout>{page}</Layout>;
+=======
+MemosPage.layout = (page) => <Layout>{page}</Layout>;
+>>>>>>> main
