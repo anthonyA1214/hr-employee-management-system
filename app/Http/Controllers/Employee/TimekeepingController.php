@@ -16,23 +16,29 @@ class TimekeepingController extends Controller
         $today = now()->toDateString();
 
         $timekeeping = Timekeeping::where('employee_id', $user->id)
-            ->where('date', $today)
-            ->first();
+        ->where('date', $today)
+        ->first();
         
         $timekeepingData = Timekeeping::where('employee_id', $user->id)
-            ->orderBy('date', 'desc')
-            ->get()
-            ->map(function ($record) {
-                if ($record->time_in && $record->time_out) {
-                    $timeIn = Carbon::parse($record->time_in);
-                    $timeOut = Carbon::parse($record->time_out);
-                    $record->total_hours = round($timeOut->diffInMinutes($timeIn) / 60, 2); // e.g. 7.5 hours
-                } else {
-                    $record->total_hours = null; // no time out yet
+        ->orderBy('date', 'desc')
+        ->get()
+        ->map(function ($record) {
+            if ($record->time_in && $record->time_out) {
+                $timeIn = Carbon::parse($record->time_in);
+                $timeOut = Carbon::parse($record->time_out);
+
+                // If time out is earlier than time in, add 1 day (overnight shift)
+                if ($timeOut->lessThan($timeIn)) {
+                    $timeOut->addDay();
                 }
 
-                return $record;
-            });
+                $record->total_hours = round($timeIn->diffInMinutes($timeOut) / 60, 2);
+            } else {
+                $record->total_hours = null;
+            }
+
+            return $record;
+        });
 
         return Inertia::render('employee/TimekeepingPage', [
             'timekeeping' => $timekeeping,

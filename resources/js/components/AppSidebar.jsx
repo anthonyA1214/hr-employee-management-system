@@ -23,7 +23,6 @@ import {
     Archive,
     Settings,
     LogOut,
-    User,
 } from "lucide-react";
 
 import { Link, usePage, Form } from "@inertiajs/react";
@@ -31,74 +30,28 @@ import { Link, usePage, Form } from "@inertiajs/react";
 import fullLogo from "@/assets/full-logo.svg";
 
 export function AppSidebar({ user }) {
-    const mainItems =
-        user.role === "hr"
-            ? [
-                  {
-                      href: "/hr/dashboard",
-                      icon: LayoutDashboard,
-                      label: "Dashboard",
-                  },
-                  {
-                      href: "/hr/employees",
-                      icon: UsersRound,
-                      label: "Employees",
-                  },
-                  { href: "/hr/payroll", icon: DollarSign, label: "Payroll" },
-                  {
-                      href: "/hr/timekeeping",
-                      icon: Clock,
-                      label: "Timekeeping",
-                  },
-                  { href: "/hr/memos", icon: FileText, label: "Memos" },
-                  {
-                      href: "/hr/leave-requests",
-                      icon: CalendarCheck2,
-                      label: "Leave Requests",
-                  },
-              ]
-            : [
-                  {
-                      href: "/employee/dashboard",
-                      icon: LayoutDashboard,
-                      label: "Dashboard",
-                  },
-                  {
-                      href: "/employee/payroll",
-                      icon: DollarSign,
-                      label: "Payroll",
-                  },
-                  {
-                      href: "/employee/timekeeping",
-                      icon: Clock,
-                      label: "Timekeeping",
-                  },
-                  { href: "/employee/memos", icon: FileText, label: "Memos" },
-                  {
-                      href: "/employee/leave-requests",
-                      icon: CalendarCheck2,
-                      label: "Leave Requests",
-                  },
-              ];
+    const mainItems = user.role === "hr" ? [
+        { href: "/hr/dashboard", icon: LayoutDashboard, label: "Dashboard", },
+        { href: "/hr/employees", icon: UsersRound, label: "Employees", },
+        { href: "/hr/payroll", icon: DollarSign, label: "Payroll", },
+        { href: "/hr/timekeeping", icon: Clock, label: "Timekeeping", },
+        { href: "/hr/memos", icon: FileText, label: "Memos", },
+        { href: "/hr/leave-requests", icon: CalendarCheck2, label: "Leave Requests", },
+    ] : [
+        { href: "/employee/dashboard", icon: LayoutDashboard, label: "Dashboard", },
+        { href: "/employee/payroll", icon: DollarSign, label: "Payroll", },
+        { href: "/employee/timekeeping", icon: Clock, label: "Timekeeping", },
+        { href: "/employee/memos", icon: FileText, label: "Memos", },
+        { href: "/employee/leave-requests", icon: CalendarCheck2, label: "Leave Requests", },
+    ];
 
-    const bottomItems =
-        user.role === "hr"
-            ? [
-                  { href: "/hr/settings", icon: Settings, label: "Settings" },
-                  { href: "/hr/archive", icon: Archive, label: "Archive" },
-              ]
-            : [
-                  {
-                      href: "/employee/settings",
-                      icon: Settings,
-                      label: "Settings",
-                  },
-                  {
-                      href: "/employee/archive",
-                      icon: Archive,
-                      label: "Archive",
-                  },
-              ];
+    const bottomItems = user.role === "hr" ? [
+        { href: "/settings", icon: Settings, label: "Settings", },
+        { href: "/hr/archive", icon: Archive, label: "Archive", },
+    ] : [
+        { href: "/settings", icon: Settings, label: "Settings", },
+        { href: "/employee/archive", icon: Archive, label: "Archive", },
+    ];
 
     const { url } = usePage();
 

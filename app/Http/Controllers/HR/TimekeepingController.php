@@ -12,27 +12,27 @@ class TimekeepingController extends Controller
 {
     public function index()
     {
-        $timekeepingData = Timekeeping::orderBy('date', 'desc')
+        $timekeepingData = Timekeeping::with('employee')
+        ->orderBy('date', 'desc')
         ->get()
         ->map(function ($record) {
+            $record->name = $record->employee->last_name . ', ' . $record->employee->first_name;
+
             if ($record->time_in && $record->time_out) {
                 $timeIn = Carbon::parse($record->time_in);
                 $timeOut = Carbon::parse($record->time_out);
-                $record->total_hours = round($timeOut->diffInMinutes($timeIn) / 60, 2); // e.g. 7.5 hours
+
+                // If time out is earlier than time in, add 1 day (overnight shift)
+                if ($timeOut->lessThan($timeIn)) {
+                    $timeOut->addDay();
+                }
+
+                $record->total_hours = round($timeIn->diffInMinutes($timeOut) / 60, 2);
             } else {
-                $record->total_hours = null; // no time out yet
+                $record->total_hours = null;
             }
 
-            return [
-                'id' => $record->id,
-                'name' => $record->employee->last_name . ', ' . $record->employee->first_name,
-                'date' => $record->date,
-                'time_in' => $record->time_in,
-                'time_out' => $record->time_out,
-                'late_minutes' => $record->late_minutes,
-                'overtime_minutes' => $record->overtime_minutes,
-                'total_hours' => $record->total_hours,
-            ];
+            return $record;
         });
 
         return Inertia::render('hr/TimekeepingPage', [

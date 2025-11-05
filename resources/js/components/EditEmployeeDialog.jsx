@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@inertiajs/react";
+import { toast } from "sonner";
 
 export default function EditEmployeeDialog({ open, onOpenChange, employee, onClose, }) {
     const { data, setData, put, processing, errors } = useForm({
@@ -45,6 +46,7 @@ export default function EditEmployeeDialog({ open, onOpenChange, employee, onClo
         put(`/hr/employees/edit/${employee.id}`, {
             onSuccess: () => {
                 onClose();
+                toast.success("Employee updated successfully!");
             },
         });
     };

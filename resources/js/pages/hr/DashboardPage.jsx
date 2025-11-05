@@ -1,22 +1,21 @@
-import Layout from "@/layouts/Layout";
-
-import DashboardCard from "@/components/DashboardCard";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DataTable from "@/components/DataTable";
-import { Button } from "@/components/ui/button";
-
 import {
-    UsersRound,
-    UserCheck2,
     CalendarCheck2,
+    Check,
+    CircleCheckBig,
     FileText,
     PenSquare,
     Trash2,
-    CircleCheckBig,
-    Check,
+    UserCheck2,
+    UsersRound,
     X,
 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import DataTable from "@/components/DataTable";
+import DashboardCard from "@/components/DashboardCard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Layout from "@/layouts/Layout";
+
 
 const employeeColumns = [
     { key: "name", label: "Name" },

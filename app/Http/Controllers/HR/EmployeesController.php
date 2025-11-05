@@ -12,10 +12,17 @@ class EmployeesController extends Controller
 {
     public function index()
     {
+        $today = now()->toDateString();
+
         $employees = User::select('id', 'first_name', 'last_name', 'email', 'contact_number' ,'position', 'department', 'hired_at', 'address')
         ->where('role', 'employee')
         ->get()
-        ->map(function ($employee) {
+        ->map(function ($employee) use ($today) {
+            $hasTimedIn = $employee->timekeepings()
+            ->whereDate('date', $today)
+            ->whereNotNull('time_in')
+            ->exists();
+
             return [
                 'id' => $employee->id,
                 'first_name' => $employee->first_name,
@@ -27,7 +34,7 @@ class EmployeesController extends Controller
                 'department' => $employee->department,
                 'hired_at' => $employee->hired_at,
                 'address' => $employee->address,
-                'status' => 'Active',
+                'status' => $hasTimedIn ? 'Active' : 'Inactive',
             ];
         });
 
