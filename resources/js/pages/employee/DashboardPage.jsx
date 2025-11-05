@@ -1,24 +1,19 @@
-import Layout from "@/layouts/Layout";
-
-import DashboardCard from "@/components/DashboardCard";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DataTable from "@/components/DataTable";
-import { Button } from "@/components/ui/button";
-
 import {
-    UsersRound,
-    UserCheck2,
-    CalendarCheck2,
+    CalendarDays,
+    Check,
+    CircleCheck,
     FileText,
+    Hourglass,
     PenSquare,
     Trash2,
-    CircleCheckBig,
-    Check,
     X,
-    CalendarDays,
-    Hourglass,
 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import DashboardCard from "@/components/DashboardCard";
+import DataTable from "@/components/DataTable";
+import Layout from "@/layouts/Layout";
 
 const payrollColumns = [
     { key: "period_start", label: "Period Start" },
@@ -67,7 +62,7 @@ export default function DashboardPage() {
                         label="Pending Leave Request"
                     />
                     <DashboardCard
-                        icon={CircleCheckBig}
+                        icon={CircleCheck}
                         value="4"
                         label="Approve Leaves"
                     />

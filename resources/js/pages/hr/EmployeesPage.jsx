@@ -1,13 +1,12 @@
-import Layout from "@/layouts/Layout";
 import { useState } from "react";
+import { PenSquare, Search, Trash2 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import EditEmployeeDialog from "@/components/EditEmployeeDialog";
-import DeleteEmployeeDialog from "@/components/DeleteEmployeeDialog";
-import AddNewEmployeeDialog from "@/components/AddNewEmployeeDialog";
 import {
     Select,
     SelectContent,
@@ -17,9 +16,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { PenSquare, Search, Trash2 } from "lucide-react";
+import AddNewEmployeeDialog from "@/components/AddNewEmployeeDialog";
 import DataTable from "@/components/DataTable";
+import DeleteEmployeeDialog from "@/components/DeleteEmployeeDialog";
+import EditEmployeeDialog from "@/components/EditEmployeeDialog";
+import Layout from "@/layouts/Layout";
 
 const employeeColumns = [
     { key: "name", label: "Name" },

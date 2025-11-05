@@ -7,6 +7,21 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
+function getStatus(status) {
+    switch (status) {
+        case "Active":
+        case "Approved":
+            return "bg-[#4AD56D]";
+
+        case "Pending":
+        case "Inactive":
+            return "bg-[#FF952B]";
+
+         case "Rejected":
+            return "bg-[#C62828]";
+    }
+}
+
 export default function DataTable({ columns, data, actions }) {
     return (
         <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
@@ -44,9 +59,7 @@ export default function DataTable({ columns, data, actions }) {
                                         {col.key === "status" ? (
                                             <span
                                                 className={`px-3 py-1 text-sm rounded-full font-medium text-white ${
-                                                    row.status === "Active"
-                                                        ? "bg-[#41D56D]"
-                                                        : "bg-[#FF0000]"
+                                                    getStatus(row.status)
                                                 }`}
                                             >
                                                 {row.status}

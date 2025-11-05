@@ -1,13 +1,14 @@
-import Layout from "@/layouts/Layout";
+import { Search } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group";
 import AddPayrollDialog from "@/components/AddPayrollDialog";
-import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
 import DataTable from "@/components/DataTable";
+import Layout from "@/layouts/Layout";
 
 const payrollColumns = [
     { key: "name", label: "Name" },

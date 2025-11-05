@@ -1,9 +1,10 @@
 import { useState } from "react";
-import Layout from "@/layouts/Layout";
-import DataTable from "@/components/DataTable";
-import { Button } from "@/components/ui/button";
 import { StickyNote } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import DataTable from "@/components/DataTable";
 import ViewMemoDialog from "@/components/ViewMemoDialog";
+import Layout from "@/layouts/Layout";
 
 const memosColumns = [
     { key: "issued_by", label: "Issued By" },

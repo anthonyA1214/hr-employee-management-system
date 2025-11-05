@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -20,20 +21,43 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import { Form } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner"
 
 export default function SubmitLeaveRequestDialog() {
+    const [open, setOpen] = useState(false);
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        leave_type: "",
+        start_date: "",
+        reason: "",
+    });
+
+    const isStartDateDisabled = data.leave_type !== "vacation_leave";
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post("/employee/leave-requests/submit", {
+            onSuccess: () => {
+                setOpen(false);
+                reset();
+                toast.success("Leave request submitted successfully!");
+            },
+        });
+    };
+
     return (
-        <Dialog>
-            <Form>
-                <DialogTrigger asChild>
-                    <Button className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]">
-                        <Plus />
-                        Leave Request
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]">
+                    <Plus />
+                    Leave Request
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">
                             Submit Leave Request
@@ -44,7 +68,7 @@ export default function SubmitLeaveRequestDialog() {
                     {/* Leave Type */}
                     <div className="flex flex-col gap-y-2 w-full">
                         <Label htmlFor="leave_type">Leave Type</Label>
-                        <Select>
+                        <Select id="leave_type" value={data.leave_type} onValueChange={(value) => setData("leave_type", value)}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select leave type" />
                             </SelectTrigger>
@@ -60,35 +84,44 @@ export default function SubmitLeaveRequestDialog() {
                                     <SelectItem value="maternity_leave">
                                         Maternity Leave
                                     </SelectItem>
+                                    <SelectItem value="paternity_leave">
+                                        Paternity Leave
+                                    </SelectItem>
+                                    <SelectItem value="emergency_leave">
+                                        Emergency Leave
+                                    </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
+                        {errors.leave_type && (
+                            <span className="text-sm text-red-500">
+                                {errors.leave_type}
+                            </span>
+                        )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        {/* Start Date */}
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="start_date">Start Date</Label>
-                            <Input id="start_date" type="date" required />
-                        </div>
-
-                        {/* End Date */}
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="end_date">End Date</Label>
-                            <Input id="end_date" type="date" required />
-                        </div>
-                    </div>
-
-                    {/* Number of Days */}
-                    <div className="flex flex-col gap-y-2 w-full">
-                        <Label htmlFor="number_of_days">Number of Days</Label>
-                        <Input
-                            id="number_of_days"
-                            type="number"
-                            min="1"
-                            required
+                    {/* Start Date */}
+                    <div className="flex flex-col gap-y-2">
+                        <Label htmlFor="start_date">Start Date</Label>
+                        <Input 
+                            id="start_date" 
+                            type="date" 
+                            disabled={isStartDateDisabled}
+                            value={data.start_date}
+                            onChange={(e) => setData("start_date", e.target.value)}
+                            required={!isStartDateDisabled}
                         />
-                    </div>
+                        {isStartDateDisabled && (
+                            <span className="text-sm text-gray-500">
+                                Only available for vacation leave.
+                            </span>
+                        )}
+                        {errors.start_date && (
+                            <span className="text-sm text-red-500">
+                                {errors.start_date}
+                            </span>
+                        )}
+                    </div>  
 
                     {/* Reason */}
                     <div className="flex flex-col gap-y-2 w-full">
@@ -98,7 +131,14 @@ export default function SubmitLeaveRequestDialog() {
                         <Textarea
                             id="reason"
                             placeholder="Enter reason for leave"
+                            value={data.reason}
+                            onChange={(e) => setData("reason", e.target.value)}
                         />
+                        {errors.reason && (
+                            <span className="text-sm text-red-500">
+                                {errors.reason}
+                            </span>
+                        )}
                     </div>
 
                     <DialogFooter>
@@ -108,12 +148,20 @@ export default function SubmitLeaveRequestDialog() {
                         <Button
                             type="submit"
                             className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]"
+                            disabled={processing}
                         >
-                            Submit Request
+                            {processing ? (
+                                <>
+                                    <Spinner />
+                                    Submitting...
+                                </>
+                            ) : (
+                                "Submit Request"
+                            )}
                         </Button>
                     </DialogFooter>
-                </DialogContent>
-            </Form>
+                </form>
+            </DialogContent>
         </Dialog>
     );
 }
