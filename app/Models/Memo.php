@@ -21,6 +21,6 @@ class Memo extends Model
 
     public function recipients()
     {
-        return $this->belongsToMany(User::class, 'memo_recipients', 'memo_id', 'employee_id');
+        return $this->belongsToMany(User::class, 'memo_recipients', 'memo_id', 'employee_id')->withTimestamps();
     }
 }

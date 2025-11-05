@@ -59,7 +59,7 @@ class User extends Authenticatable
 
     public function timekeepings()
     {
-        return $this->hasMany(Timekeeping::class);
+        return $this->hasMany(Timekeeping::class, 'employee_id');
     }
 
     public function leaves()

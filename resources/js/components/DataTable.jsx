@@ -37,7 +37,10 @@ export default function DataTable({ columns, data, actions }) {
                         data.map((row) => (
                             <TableRow key={row.id}>
                                 {columns.map((col) => (
-                                    <TableCell key={col.key}>
+                                    <TableCell 
+                                        key={col.key}
+                                        className="max-w-[250px] truncate overflow-hidden text-ellipsis whitespace-nowrap"
+                                    >
                                         {col.key === "status" ? (
                                             <span
                                                 className={`px-3 py-1 text-sm rounded-full font-medium text-white ${

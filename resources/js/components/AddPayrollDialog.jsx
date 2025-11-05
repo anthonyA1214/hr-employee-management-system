@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { Form } from "@inertiajs/react";
 
-export default function AddPayrollDialog() {
+export default function AddPayrollDialog({ employees }) {
     return (
         <Dialog>
             <Form>
@@ -48,12 +48,11 @@ export default function AddPayrollDialog() {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Employees</SelectLabel>
-                                    <SelectItem value="john_doe">
-                                        John Doe
-                                    </SelectItem>
-                                    <SelectItem value="jane_smith">
-                                        Jane Smith
-                                    </SelectItem>
+                                    {employees.map((employee) => (
+                                        <SelectItem key={employee.id} value={employee.id}>
+                                            {employee.name}
+                                        </SelectItem>
+                                    ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -97,41 +96,21 @@ export default function AddPayrollDialog() {
                                 required
                             />
                         </div>
-
-                        {/* Tax Percentage */}
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="tax_percentage">
-                                Tax Percentage
-                            </Label>
-                            <Input
-                                id="tax_percentage"
-                                type="number"
-                                placeholder="0"
-                                required
-                            />
-                        </div>
-
-                        {/* Net Pay */}
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="net_pay">Net Pay</Label>
-                            <Input
-                                id="net_pay"
-                                type="number"
-                                placeholder="0"
-                                required
-                            />
-                        </div>
                     </div>
-                    {/* Address */}
+
+                    {/* Tax Percentage */}
                     <div className="flex flex-col gap-y-2">
-                        <Label htmlFor="other_deduction">Other Deduction</Label>
+                        <Label htmlFor="tax_percentage">
+                            Tax Percentage
+                        </Label>
                         <Input
-                            id="other_deduction"
+                            id="tax_percentage"
                             type="number"
                             placeholder="0"
                             required
                         />
                     </div>
+                    
                     <DialogFooter>
                         <DialogClose asChild>
                             <Button variant="outline">Cancel</Button>
