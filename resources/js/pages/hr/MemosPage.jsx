@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { StickyNote } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import DataTable from "@/components/DataTable";
 import SendMemoDialog from "@/components/SendMemoDialog";
-import Layout from "@/layouts/Layout";
-import { Button } from "@/components/ui/button";
-import { StickyNote } from "lucide-react";
 import ViewMemoDialog from "@/components/ViewMemoDialog";
+import Layout from "@/layouts/Layout";
 
 const memosColumns = [
     { key: "name", label: "Name" },

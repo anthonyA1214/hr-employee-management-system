@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { UserRoundPlus } from "lucide-react";
 import { useForm } from "@inertiajs/react";
+import { toast } from "sonner";
 
 export default function AddNewEmployeeDialog() {
     const [open, setOpen] = useState(false);
@@ -37,6 +38,7 @@ export default function AddNewEmployeeDialog() {
             onSuccess: () => {
                 setOpen(false);
                 reset();
+                toast.success("Employee added successfully!");
             },
         });
     };

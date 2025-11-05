@@ -1,18 +1,17 @@
-import Layout from "@/layouts/Layout";
-import SubmitLeaveRequestDialog from "@/components/SubmitLeaveRequestDialog";
 import DataTable from "@/components/DataTable";
+import SubmitLeaveRequestDialog from "@/components/SubmitLeaveRequestDialog";
+import Layout from "@/layouts/Layout";
 
-const leaveRequestColumns = [
+const leaveRequestsColumns = [
     { key: "leave_type", label: "Leave Type" },
     { key: "start_date", label: "Start Date" },
     { key: "end_date", label: "End Date" },
     { key: "days", label: "Days" },
     { key: "reason", label: "Reason" },
+    { key: "status", label: "Status" },
 ];
 
-const leaveRequestData = [];
-
-export default function LeaveRequestsPage() {
+export default function LeaveRequestsPage({ leaveRequestsData }) {
     return (
         <>
             <div className="space-y-4">
@@ -21,7 +20,7 @@ export default function LeaveRequestsPage() {
                     <SubmitLeaveRequestDialog />
                 </div>
 
-                <DataTable columns={leaveRequestColumns} data={leaveRequestData} />
+                <DataTable columns={leaveRequestsColumns} data={leaveRequestsData} />
             </div>
         </>
     );

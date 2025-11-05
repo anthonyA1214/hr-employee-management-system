@@ -1,12 +1,14 @@
-import Layout from "@/layouts/Layout";
+import { Search } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { Button } from "@/components/ui/button";
 import DataTable from "@/components/DataTable";
-import { Search } from "lucide-react";
+import Layout from "@/layouts/Layout";
+
 
 const timekeepingColumns = [
     { key: "name", label: "Name" },

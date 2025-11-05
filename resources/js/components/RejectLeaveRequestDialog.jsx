@@ -11,17 +11,17 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "@inertiajs/react";
 import { toast } from "sonner";
 
-export default function DeleteEmployeeDialog({ open, onOpenChange, employee, onClose, }) {
-    const { delete: destroy, processing } = useForm();
+export default function RejectLeaveRequestDialog({ open, onOpenChange, leaveRequest, onClose, }) {
+    const { put, processing } = useForm();
 
-    const handleDelete = () => {
-        if (!employee) return;
-
-        destroy(`/hr/employees/delete/${employee.id}`, {
-            method: 'delete',
+    const handleReject = () => {
+        put(`/hr/leave-requests/reject/${leaveRequest.id}`, {
             onSuccess: () => {
+                toast.success("Leave request rejected successfully.");
                 onClose();
-                toast.success("Employee deleted successfully!");
+            },
+            onError: () => {
+                toast.error("Failed to reject leave request. Please try again.");
             },
         });
     };
@@ -31,15 +31,15 @@ export default function DeleteEmployeeDialog({ open, onOpenChange, employee, onC
             <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Delete Employee</DialogTitle>
+                        <DialogTitle>Approve Leave Request</DialogTitle>
                         <div className="border-b-2 border-[#8EC5EE]"></div>
                     </DialogHeader>
                     <div className="flex flex-col gap-2">
                         <p className="font-medium">
-                            Are you sure you want to delete <span className="font-bold">{employee?.name}</span>?
+                            Are you sure you want to reject the leave request for <span className="font-bold">{leaveRequest?.first_name} {leaveRequest?.last_name}</span>?
                         </p>
                         <p className="text-sm opacity-50">
-                            This action is permanent and cannot be undone.
+                            Do you want to proceed with rejecting this leave request?
                         </p>
                     </div>                
                     <DialogFooter>
@@ -47,16 +47,16 @@ export default function DeleteEmployeeDialog({ open, onOpenChange, employee, onC
                             <Button variant="outline">Cancel</Button>
                         </DialogClose>
                         <Button
-                            onClick={handleDelete}
+                            onClick={handleReject}
                             disabled={processing}
                             className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]"
                         >
                             {processing ? (
                                 <>
-                                    <Spinner /> Deleting...
+                                    <Spinner /> Rejecting...
                                 </>
                             ) : (
-                                "Delete"
+                                "Reject"
                             )}
                         </Button>
                     </DialogFooter>

@@ -6,7 +6,6 @@ use App\Http\Controllers\Employee\DashboardController as EmployeeDashboardContro
 use App\Http\Controllers\Employee\LeaveRequestsController as EmployeeLeaveRequestsController;
 use App\Http\Controllers\Employee\MemosController as EmployeeMemosController;
 use App\Http\Controllers\Employee\PayrollController as EmployeePayrollController;
-use App\Http\Controllers\Employee\SettingsController as EmployeeSettingsController;
 use App\Http\Controllers\Employee\TimekeepingController as EmployeeTimekeepingController;
 use App\Http\Controllers\HR\ArchiveController;
 use App\Http\Controllers\HR\DashboardController;
@@ -14,8 +13,8 @@ use App\Http\Controllers\HR\EmployeesController;
 use App\Http\Controllers\HR\LeaveRequestsController;
 use App\Http\Controllers\HR\MemosController;
 use App\Http\Controllers\HR\PayrollController;
-use App\Http\Controllers\HR\SettingsController;
 use App\Http\Controllers\HR\TimekeepingController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'LandingPage')->name('landing');
@@ -47,8 +46,8 @@ Route::middleware(['auth', 'role:hr'])
     Route::post('/memos/send', [MemosController::class, 'store'])->name('memos.send');
 
     Route::get('/leave-requests', [LeaveRequestsController::class, 'index'])->name('leave-requests');
-
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::put('/leave-requests/approve/{id}', [LeaveRequestsController::class, 'approve'])->name('leave-requests.approve');
+    Route::put('/leave-requests/reject/{id}', [LeaveRequestsController::class, 'reject'])->name('leave-requests.reject');
 
     Route::get('/archive', [ArchiveController::class, 'index'])->name('archive');
 });
@@ -68,8 +67,15 @@ Route::middleware(['auth', 'role:employee'])
     Route::get('/memos', [EmployeeMemosController::class, 'index'])->name('memos');
 
     Route::get('/leave-requests', [EmployeeLeaveRequestsController::class, 'index'])->name('leave-requests');
-
-    Route::get('/settings', [EmployeeSettingsController::class, 'index'])->name('settings');
+    Route::post('/leave-requests/submit', [EmployeeLeaveRequestsController::class, 'store'])->name('leave-requests.submit');
 
     Route::get('/archive', [EmployeeArchiveController::class, 'index'])->name('archive');
+});
+
+Route::middleware(['auth', 'role:hr,employee'])
+->prefix('settings')
+->name('settings.')
+->group(function () {
+    Route::get('/', [SettingsController::class, 'index'])->name('index');
+    Route::put('/edit/{id}', [SettingsController::class, 'update'])->name('edit');
 });
