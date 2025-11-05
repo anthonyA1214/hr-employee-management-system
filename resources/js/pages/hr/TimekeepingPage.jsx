@@ -18,9 +18,7 @@ const timekeepingColumns = [
     { key: "total_hours", label: "Total Hours Worked" },
 ];
 
-const timekeepingData = [];
-
-export default function TimekeepingPage() {
+export default function TimekeepingPage({ timekeepingData }) {
     return (
         <>
             <div className="space-y-4">

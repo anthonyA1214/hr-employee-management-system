@@ -105,7 +105,7 @@ export function AppSidebar({ user }) {
     return (
         <Sidebar collapsible="icon" className="text-[#F2F2F2]">
             <SidebarHeader className="flex items-center justify-center">
-                <img src={fullLogo} alt="Full Logo" />
+                <img src={fullLogo} alt="Full Logo" className="w-48 h-auto" />
             </SidebarHeader>
             <SidebarContent>
                 <Separator className="my-4 bg-[#747474]" />

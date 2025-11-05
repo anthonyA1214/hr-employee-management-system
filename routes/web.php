@@ -44,6 +44,7 @@ Route::middleware(['auth', 'role:hr'])
     Route::get('/timekeeping', [TimekeepingController::class, 'index'])->name('timekeeping');
 
     Route::get('/memos', [MemosController::class, 'index'])->name('memos');
+    Route::post('/memos/send', [MemosController::class, 'store'])->name('memos.send');
 
     Route::get('/leave-requests', [LeaveRequestsController::class, 'index'])->name('leave-requests');
 
@@ -61,6 +62,8 @@ Route::middleware(['auth', 'role:employee'])
     Route::get('/payroll', [EmployeePayrollController::class, 'index'])->name('payroll');
 
     Route::get('/timekeeping', [EmployeeTimekeepingController::class, 'index'])->name('timekeeping');
+    Route::post('/timekeeping/time-in', [EmployeeTimekeepingController::class, 'timeIn'])->name('timekeeping.time-in');
+    Route::post('/timekeeping/time-out', [EmployeeTimekeepingController::class, 'timeOut'])->name('timekeeping.time-out');
 
     Route::get('/memos', [EmployeeMemosController::class, 'index'])->name('memos');
 

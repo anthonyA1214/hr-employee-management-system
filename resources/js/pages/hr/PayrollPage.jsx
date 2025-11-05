@@ -22,13 +22,13 @@ const payrollColumns = [
 
 const payrollData = [];
 
-export default function PayrollPage() {
+export default function PayrollPage({ employees }) {
     return (
         <>
             <div className="space-y-4">
                 <div className="flex justify-between">
                     <h1 className="text-3xl font-bold">Payroll Management</h1>
-                    <AddPayrollDialog />
+                    <AddPayrollDialog employees={employees} />
                 </div>
 
                 <div className="flex bg-[#F2F2F2] w-full p-2 overflow-hidden rounded-lg border border-gray-200 shadow-sm gap-4">

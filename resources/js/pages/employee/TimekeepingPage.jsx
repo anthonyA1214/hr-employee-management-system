@@ -1,7 +1,11 @@
+import { useState, useEffect } from "react";
 import Layout from "@/layouts/Layout";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { router } from "@inertiajs/react";
 import DataTable from "@/components/DataTable";
+import { toast } from "sonner"
+import { Spinner } from "@/components/ui/spinner";
 
 const timekeepingColumns = [
     { key: "date", label: "Date" },
@@ -12,9 +16,62 @@ const timekeepingColumns = [
     { key: "total_hours", label: "Total Hours Worked" },
 ];
 
-const timekeepingData = [];
+const formatTime = (timeString) => {
+    if (!timeString) return "";
+    const date = new Date(`1970-01-01T${timeString}`);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
+};
 
-export default function TimekeepingPage() {
+export default function TimekeepingPage({ timekeeping, timekeepingData }) {
+    const [now, setNow] = useState(new Date());
+    const [hasTimedIn, setHasTimedIn] = useState(!!timekeeping?.time_in);
+    const [hasTimedOut, setHasTimedOut] = useState(!!timekeeping?.time_out);
+
+    const [timeInProcessing, setTimeInProcessing] = useState(false);
+    const [timeOutProcessing, setTimeOutProcessing] = useState(false);
+
+    useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 1000); // Update every second
+        return () => clearInterval(timer);
+    }, []); 
+    
+    const currentDate = now.toISOString().split("T")[0];
+    const currentTime = now.toTimeString().split(" ")[0];
+
+    const handleTimeIn = (e) => {
+        e.preventDefault();
+        setTimeInProcessing(true);
+        
+        router.post("/employee/timekeeping/time-in", 
+            { date: currentDate, time: currentTime }, // <- send plain JSON
+            {
+                onSuccess: () => {
+                    toast.success("Successfully timed in!");
+                    setHasTimedIn(true);
+                },
+                onError: (errors) => toast.error(errors.message || "Failed to time in."),
+                onFinish: () => setTimeInProcessing(false),
+            }
+        );
+    };
+
+    const handleTimeOut = (e) => {
+        e.preventDefault();
+        setTimeOutProcessing(true);
+
+        router.post("/employee/timekeeping/time-out", 
+            { date: currentDate, time: currentTime }, // <- send plain JSON
+            {
+                onSuccess: () => {
+                    toast.success("Successfully timed out!");
+                    setHasTimedOut(true);
+                },
+                onError: (errors) => toast.error(errors.message || "Failed to time out."),
+                onFinish: () => setTimeOutProcessing(false),
+            }
+        );
+    };
+
     return (
         <>
             <div className="space-y-4">
@@ -29,11 +86,17 @@ export default function TimekeepingPage() {
                         <CardContent>
                             <div className="flex flex-col gap-y-4">
                                 <div className="grid grid-cols-2 gap-4 text-center font-bold text-xl">
-                                    <span>Date: 2025-01-02</span>
-                                    <span>Time: 09:00 AM</span>
+                                    <span>Date: {currentDate}</span>
+                                    <span>Time: { hasTimedIn ? formatTime(timekeeping?.time_in) : formatTime(currentTime) }</span>
                                 </div>
-                                <Button className="bg-[#052743] hover:bg-[#365065] active:bg-[#647888]">
-                                    Time In
+                                <Button className="bg-[#052743] hover:bg-[#365065] active:bg-[#647888]" onClick={handleTimeIn} disabled={timeInProcessing || hasTimedIn}>
+                                    {timeInProcessing ? (
+                                        <>
+                                            <Spinner /> Processing...
+                                        </>
+                                    ) : (
+                                        hasTimedIn ? "Already Timed In" : "Time In"
+                                    )}
                                 </Button>
                             </div>
                         </CardContent>
@@ -48,11 +111,17 @@ export default function TimekeepingPage() {
                         <CardContent>
                             <div className="flex flex-col gap-y-4">
                                 <div className="grid grid-cols-2 gap-4 text-center font-bold text-xl">
-                                    <span>Date: 2025-01-02</span>
-                                    <span>Time: 09:00 AM</span>
+                                    <span>Date: {currentDate}</span>
+                                    <span>Time: { hasTimedOut ? formatTime(timekeeping?.time_out) : formatTime(currentTime) }</span>
                                 </div>
-                                <Button className="bg-[#052743] hover:bg-[#365065] active:bg-[#647888]">
-                                    Time Out
+                                <Button className="bg-[#052743] hover:bg-[#365065] active:bg-[#647888]" onClick={handleTimeOut} disabled={timeOutProcessing || !hasTimedIn || hasTimedOut}>
+                                    {timeOutProcessing ? (
+                                        <>
+                                            <Spinner /> Processing...
+                                        </>
+                                    ) : (
+                                        hasTimedOut ? "Already Timed Out" : "Time Out"
+                                    )}
                                 </Button>
                             </div>
                         </CardContent>

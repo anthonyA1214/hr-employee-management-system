@@ -40,6 +40,7 @@ export default function AddNewEmployeeDialog() {
             },
         });
     };
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -82,9 +83,7 @@ export default function AddNewEmployeeDialog() {
                                 type="text"
                                 placeholder="e.g. Doe"
                                 value={data.last_name}
-                                onChange={(e) =>
-                                    setData("last_name", e.target.value)
-                                }
+                                onChange={(e) => setData("last_name", e.target.value)}
                                 required
                             />
                             {errors.last_name && (

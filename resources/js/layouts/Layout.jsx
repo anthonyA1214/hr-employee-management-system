@@ -2,6 +2,7 @@ import { usePage } from "@inertiajs/react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Toaster } from "@/components/ui/sonner"
 
 export default function HRLayout({ children }) {
     const { auth } = usePage().props;
@@ -35,6 +36,7 @@ export default function HRLayout({ children }) {
 
                 {/* Main content */}
                 <div className="w-full p-8">{children}</div>
+                <Toaster />
             </main>
         </SidebarProvider>
     );

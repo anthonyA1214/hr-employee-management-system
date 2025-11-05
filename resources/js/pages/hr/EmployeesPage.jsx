@@ -1,6 +1,5 @@
 import Layout from "@/layouts/Layout";
 import { useState } from "react";
-import { usePage } from "@inertiajs/react";
 import {
     InputGroup,
     InputGroupAddon,
@@ -33,8 +32,7 @@ const employeeColumns = [
     { key: "status", label: "Status" },
 ];
 
-export default function EmployeesPage() {
-    const { employees } = usePage().props;
+export default function EmployeesPage({ employees }) {
     const [editEmployee, setEditEmployee] = useState(null);
     const [deleteEmployee, setDeleteEmployee] = useState(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);

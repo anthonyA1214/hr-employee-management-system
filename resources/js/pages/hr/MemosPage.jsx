@@ -1,26 +1,57 @@
+import { useState } from "react";
 import DataTable from "@/components/DataTable";
 import SendMemoDialog from "@/components/SendMemoDialog";
 import Layout from "@/layouts/Layout";
+import { Button } from "@/components/ui/button";
+import { StickyNote } from "lucide-react";
+import ViewMemoDialog from "@/components/ViewMemoDialog";
 
 const memosColumns = [
     { key: "name", label: "Name" },
     { key: "subject", label: "Subject" },
-    { key: "date_sent", label: "Date Sent" },
-    { key: "content", label: "Content" },
+    { key: "sent_at", label: "Date Sent" },
+    { key: "body", label: "Content" },
 ];
 
-const memosData = [];
+export default function MemosPage({ employees, memosData }) {
+    const [viewMemo, setViewMemo] = useState(null);
+    const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
 
-export default function MemosPage() {
+    const openViewDialog = (memo) => {
+        setViewMemo(memo);
+        setIsViewDialogOpen(true);
+    };
+
     return (
         <>
             <div className="space-y-4">
                 <div className="flex justify-between">
                     <h1 className="text-3xl font-bold">Memo Management</h1>
-                    <SendMemoDialog />
+                    <SendMemoDialog employees={employees} />
                 </div>
 
-                <DataTable columns={memosColumns} data={memosData} />
+                <DataTable 
+                    columns={memosColumns} 
+                    data={memosData} 
+                    actions={(row) => (
+                        <>
+                            <Button
+                                onClick={() => openViewDialog(row)}
+                                className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
+                            >
+                                <StickyNote />
+                            </Button>
+                        </>
+                    )}  
+                />
+
+                {viewMemo && (
+                    <ViewMemoDialog
+                        open={isViewDialogOpen}
+                        onOpenChange={setIsViewDialogOpen}
+                        memo={viewMemo}
+                    />
+                )}
             </div>
         </>
     );
