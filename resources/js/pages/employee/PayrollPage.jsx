@@ -11,9 +11,7 @@ const payrollColumns = [
     { key: "net_pay", label: "Net Pay" },
 ];
 
-const payrollData = [];
-
-export default function PayrollPage() {
+export default function PayrollPage({ payrollData }) {
     return (
         <>
             <div className="flex flex-col gap-y-8">

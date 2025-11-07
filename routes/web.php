@@ -39,6 +39,9 @@ Route::middleware(['auth', 'role:hr'])
     Route::delete('/employees/delete/{id}', [EmployeesController::class, 'destroy'])->name('employees.delete');
 
     Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll');
+    Route::post('/payroll/add', [PayrollController::class, 'store'])->name('payroll.add');
+    Route::put('/payroll/send/{id}', [PayrollController::class, 'send'])->name('payroll.send');
+    Route::delete('/payroll/delete/{id}', [PayrollController::class, 'destroy'])->name('payroll.delete');
 
     Route::get('/timekeeping', [TimekeepingController::class, 'index'])->name('timekeeping');
 

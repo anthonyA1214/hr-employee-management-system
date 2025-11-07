@@ -54,18 +54,28 @@ class TimekeepingController extends Controller
         $date = $request->input('date');
         $time = $request->input('time');
 
+        $timeIn = Carbon::createFromFormat('H:i:s', $time);
+        $cutOff = Carbon::createFromTime(8, 10, 0); // 8:10 AM
+
         $existing = $user->timekeepings()->where('date', $date)->first();
 
         if ($existing) {
             return redirect()->back()->withErrors(['You have already timed in today.']);
-        } else {
-            $user->timekeepings()->create([
-                'date' => $date,
-                'time_in' => $time,
-            ]);
+        } 
 
-            return redirect()->back()->with('success', 'Time in recorded successfully.');
+        $lateMinutes = 0;
+        if ($timeIn->greaterThan($cutOff)) {
+            $lateMinutes = $cutOff->diffInMinutes($timeIn);
         }
+
+        $user->timekeepings()->create([
+            'date' => $date,
+            'time_in' => $time,
+            'late_minutes' => $lateMinutes,
+        ]);
+
+        return redirect()->back()->with('success', 'Time in recorded successfully.');
+        
     }
 
     public function timeOut(Request $request)
@@ -76,11 +86,20 @@ class TimekeepingController extends Controller
         $date = $request->input('date');
         $time = $request->input('time');
 
+        $timeOut = Carbon::createFromFormat('H:i:s', $time);
+        $cutOff = Carbon::createFromTime(17, 0, 0); // 5:00 PM
+
         $existing = $user->timekeepings()->where('date', $date)->first();
+
+        $overtimeMinutes = 0;
+        if ($timeOut->greaterThan($cutOff)) {
+            $overtimeMinutes = $cutOff->diffInMinutes($timeOut);
+        }
 
         if ($existing && !$existing->time_out) {
             $existing->update([
                 'time_out' => $time,
+                'overtime_minutes' => $overtimeMinutes,
             ]);
 
             return redirect()->back()->with('success', 'Time out recorded successfully.');

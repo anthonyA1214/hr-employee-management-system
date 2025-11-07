@@ -16,6 +16,7 @@ class Payroll extends Model
         'deductions',
         'tax_percentage',
         'net_pay',
+        'status',
     ];
 
     public function employee()
