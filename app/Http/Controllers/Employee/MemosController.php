@@ -9,15 +9,11 @@ use Inertia\Inertia;
 
 class MemosController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $employeeId = request()->user()->id;
+        $user = $request->user();
 
-        $memosData = Memo::with('recipients')
-        ->whereHas('recipients', function ($query) use ($employeeId) {
-            $query->where('employee_id', $employeeId);
-        })
-        ->orderBy('sent_at', 'desc')
+        $memosData = $user->receivedMemos()
         ->get()
         ->map(function ($memo) {
             return [

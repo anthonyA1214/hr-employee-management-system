@@ -20,7 +20,6 @@ import {
     DollarSign,
     CalendarCheck2,
     FileText,
-    Archive,
     Settings,
     LogOut,
 } from "lucide-react";
@@ -45,13 +44,9 @@ export function AppSidebar({ user }) {
         { href: "/employee/leave-requests", icon: CalendarCheck2, label: "Leave Requests", },
     ];
 
-    const bottomItems = user.role === "hr" ? [
-        { href: "/settings", icon: Settings, label: "Settings", },
-        { href: "/hr/archive", icon: Archive, label: "Archive", },
-    ] : [
-        { href: "/settings", icon: Settings, label: "Settings", },
-        { href: "/employee/archive", icon: Archive, label: "Archive", },
-    ];
+    const bottomItems = [
+        { href: "/settings", icon: Settings, label: "Settings", }
+    ]
 
     const { url } = usePage();
 

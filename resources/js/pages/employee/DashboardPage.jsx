@@ -1,12 +1,11 @@
+import { useState } from "react";
+
 import {
     CalendarDays,
-    Check,
     CircleCheck,
     FileText,
     Hourglass,
-    PenSquare,
-    Trash2,
-    X,
+    StickyNote,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DashboardCard from "@/components/DashboardCard";
 import DataTable from "@/components/DataTable";
 import Layout from "@/layouts/Layout";
+import ViewMemoDialog from "@/components/ViewMemoDialog";
 
 const payrollColumns = [
     { key: "period_start", label: "Period Start" },
@@ -25,26 +25,32 @@ const payrollColumns = [
     { key: "net_pay", label: "Net Pay" },
 ];
 
-const leaveRequestColumns = [
+const leaveRequestsColumns = [
     { key: "leave_type", label: "Leave Type" },
     { key: "start_date", label: "Start Date" },
     { key: "end_date", label: "End Date" },
     { key: "days", label: "Days" },
     { key: "reason", label: "Reason" },
+    { key: "status", label: "Status" },
 ];
 
 const memosColumns = [
     { key: "issued_by", label: "Issued By" },
     { key: "subject", label: "Subject" },
-    { key: "date_sent", label: "Date Sent" },
-    { key: "content", label: "Content" },
+    { key: "sent_at", label: "Date Sent" },
+    { key: "body", label: "Content" },
 ];
 
-const payrollData = [];
-const leaveRequestData = [];
-const memosData = [];
+export default function DashboardPage({ counts, payrollData, leaveRequestsData, memosData }) {
+    // Memo Dialog State
+    const [viewMemo, setViewMemo] = useState(null);
+    const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
 
-export default function DashboardPage() {
+    const openViewDialog = (memo) => {
+        setViewMemo(memo);
+        setIsViewDialogOpen(true);
+    };
+
     return (
         <>
             <div className="flex flex-col gap-y-8">
@@ -58,17 +64,17 @@ export default function DashboardPage() {
                     />
                     <DashboardCard
                         icon={Hourglass}
-                        value="2"
+                        value={counts.pendingLeaves}
                         label="Pending Leave Request"
                     />
                     <DashboardCard
                         icon={CircleCheck}
-                        value="4"
+                        value={counts.approvedLeaves}
                         label="Approve Leaves"
                     />
                     <DashboardCard
                         icon={FileText}
-                        value="1"
+                        value={counts.totalMemos}
                         label="Total Memos"
                     />
                 </div>
@@ -87,48 +93,12 @@ export default function DashboardPage() {
                             <DataTable
                                 columns={payrollColumns}
                                 data={payrollData}
-                                actions={(row) => (
-                                    <>
-                                        <Button
-                                            onClick={() => editEmployee(row.id)}
-                                            className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
-                                        >
-                                            <PenSquare />
-                                        </Button>
-                                        <Button
-                                            onClick={() =>
-                                                deleteEmployee(row.id)
-                                            }
-                                            className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"
-                                        >
-                                            <Trash2 />
-                                        </Button>
-                                    </>
-                                )}
                             />
                         </TabsContent>
                         <TabsContent value="leave-requests">
                             <DataTable
-                                columns={leaveRequestColumns}
-                                data={leaveRequestData}
-                                actions={(row) => (
-                                    <>
-                                        <Button
-                                            onClick={() => editEmployee(row.id)}
-                                            className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
-                                        >
-                                            <CircleCheckBig />
-                                        </Button>
-                                        <Button
-                                            onClick={() =>
-                                                deleteEmployee(row.id)
-                                            }
-                                            className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"
-                                        >
-                                            <Trash2 />
-                                        </Button>
-                                    </>
-                                )}
+                                columns={leaveRequestsColumns}
+                                data={leaveRequestsData}
                             />
                         </TabsContent>
                         <TabsContent value="memos">
@@ -138,18 +108,10 @@ export default function DashboardPage() {
                                 actions={(row) => (
                                     <>
                                         <Button
-                                            onClick={() => editEmployee(row.id)}
+                                            onClick={() => openViewDialog(row)}
                                             className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
                                         >
-                                            <Check />
-                                        </Button>
-                                        <Button
-                                            onClick={() =>
-                                                deleteEmployee(row.id)
-                                            }
-                                            className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"
-                                        >
-                                            <X />
+                                            <StickyNote />
                                         </Button>
                                     </>
                                 )}
@@ -157,6 +119,13 @@ export default function DashboardPage() {
                         </TabsContent>
                     </Tabs>
                 </div>
+                {viewMemo && (
+                    <ViewMemoDialog
+                        open={isViewDialogOpen}
+                        onOpenChange={setIsViewDialogOpen}
+                        memo={viewMemo}
+                    />
+                )}
             </div>
         </>
     );

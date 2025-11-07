@@ -24,7 +24,7 @@ function getStatus(status) {
 
 export default function DataTable({ columns, data, actions }) {
     return (
-        <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+        <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm max-w-full">
             <Table>
                 <TableHeader className="bg-[#062745] [&_tr]:hover:bg-transparent [&_th]:hover:bg-transparent [&_th]:text-white">
                     <TableRow>
