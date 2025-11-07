@@ -28,7 +28,7 @@ export default function SendPayrollRecordDialog({ open, onOpenChange, payroll, o
     return (
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent>
+                <DialogContent className="max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Send Payroll Record</DialogTitle>
                         <div className="border-b-2 border-[#8EC5EE]"></div>

@@ -29,7 +29,7 @@ export default function DeleteEmployeeDialog({ open, onOpenChange, employee, onC
     return (
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent>
+                <DialogContent className="max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Delete Employee</DialogTitle>
                         <div className="border-b-2 border-[#8EC5EE]"></div>

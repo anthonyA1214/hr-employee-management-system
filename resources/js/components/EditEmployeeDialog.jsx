@@ -55,7 +55,7 @@ export default function EditEmployeeDialog({ open, onOpenChange, employee, onClo
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent>
+            <DialogContent className="max-h-[80vh] overflow-y-auto">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">

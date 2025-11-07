@@ -52,7 +52,7 @@ export default function AddPayrollDialog({ employees }) {
                     Add Payroll
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-h-[80vh] overflow-y-auto">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">

@@ -28,7 +28,7 @@ export default function DeletePayrollRecordDialog({ open, onOpenChange, payroll,
     return (
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent>
+                <DialogContent className="max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Delete Payroll Record</DialogTitle>
                         <div className="border-b-2 border-[#8EC5EE]"></div>

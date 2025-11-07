@@ -51,7 +51,7 @@ export default function AddNewEmployeeDialog() {
                     Add Employee
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-h-[80vh] overflow-y-auto">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">

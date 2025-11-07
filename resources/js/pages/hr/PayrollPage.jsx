@@ -25,29 +25,29 @@ const payrollColumns = [
 ];
 
 export default function PayrollPage({ employees, payrollData }) {
-    const [sendPayrollEmployee, setSendPayrollEmployee] = useState(null);``
-    const [deleteEmployee, setDeleteEmployee] = useState(null);
+    const [sendPayrollEmployee, setSendPayrollEmployee] = useState(null);
+    const [deletePayrollEmployee, setDeletePayrollEmployee] = useState(null);
     const [isSendPayrollDialogOpen, setIsSendPayrollDialogOpen] = useState(false);
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isDeletePayrollDialogOpen, setIsDeletePayrollDialogOpen] = useState(false);
 
-    const openSendPayroll = (payroll) => {
+    const openSendPayrollDialog = (payroll) => {
         setSendPayrollEmployee(payroll);
         setIsSendPayrollDialogOpen(true);
     };
 
-    const closeSendPayroll = () => {
+    const closeSendPayrollDialog = () => {
         setSendPayrollEmployee(null);
         setIsSendPayrollDialogOpen(false);
     };
 
-    const openDeleteDialog = (payroll) => {
-        setDeleteEmployee(payroll);
-        setIsDeleteDialogOpen(true);
+    const openDeletePayrollDialog = (payroll) => {
+        setDeletePayrollEmployee(payroll);
+        setIsDeletePayrollDialogOpen(true);
     };
 
-    const closeDeleteDialog = () => {
-        setDeleteEmployee(null);
-        setIsDeleteDialogOpen(false);
+    const closeDeletePayrollDialog = () => {
+        setDeletePayrollEmployee(null);
+        setIsDeletePayrollDialogOpen(false);
     };
 
     return (
@@ -85,13 +85,13 @@ export default function PayrollPage({ employees, payrollData }) {
                     actions={(row) => (
                         <>
                             <Button
-                                onClick={() => openSendPayroll(row)}
+                                onClick={() => openSendPayrollDialog(row)}
                                 className="bg-transparent text-[#41D56D] hover:bg-[#E6F9F0] hover:text-[#1B5E34] active:bg-[#C8F2D9]"
                             >
                                 <CircleCheckBig />
                             </Button>
                             <Button
-                                onClick={() => openDeleteDialog(row)}
+                                onClick={() => openDeletePayrollDialog(row)}
                                 className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"
                             >
                                 <Trash2 />
@@ -105,16 +105,16 @@ export default function PayrollPage({ employees, payrollData }) {
                         open={isSendPayrollDialogOpen}
                         onOpenChange={setIsSendPayrollDialogOpen}
                         payroll={sendPayrollEmployee}
-                        onClose={closeSendPayroll}
+                        onClose={closeSendPayrollDialog}
                     />
                 )}
 
-                {deleteEmployee && (
+                {deletePayrollEmployee && (
                     <DeletePayrollRecordDialog
-                        open={isDeleteDialogOpen}
-                        onOpenChange={setIsDeleteDialogOpen}
-                        payroll={deleteEmployee}
-                        onClose={closeDeleteDialog}
+                        open={isDeletePayrollDialogOpen}
+                        onOpenChange={setIsDeletePayrollDialogOpen}
+                        payroll={deletePayrollEmployee}
+                        onClose={closeDeletePayrollDialog}
                     />
                 )}
             </div>

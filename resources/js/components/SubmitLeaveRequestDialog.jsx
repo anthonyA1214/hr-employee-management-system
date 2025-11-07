@@ -56,7 +56,7 @@ export default function SubmitLeaveRequestDialog() {
                     Leave Request
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-h-[80vh] overflow-y-auto">
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">
@@ -112,7 +112,7 @@ export default function SubmitLeaveRequestDialog() {
                             required={!isStartDateDisabled}
                         />
                         {isStartDateDisabled && (
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm opacity-50">
                                 Only available for vacation leave.
                             </span>
                         )}
@@ -133,6 +133,7 @@ export default function SubmitLeaveRequestDialog() {
                             placeholder="Enter reason for leave"
                             value={data.reason}
                             onChange={(e) => setData("reason", e.target.value)}
+                            className="min-h-40 max-h-60 overflow-y-auto"
                         />
                         {errors.reason && (
                             <span className="text-sm text-red-500">
