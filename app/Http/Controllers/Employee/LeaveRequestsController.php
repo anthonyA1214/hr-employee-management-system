@@ -11,7 +11,9 @@ class LeaveRequestsController extends Controller
 {
     public function index(Request $request)
     {
-        $leaveRequestsData = $request->user()->leaves()->get()->map(function ($leave) {
+        $user = $request->user();
+
+        $leaveRequestsData = $user->leaves()->get()->map(function ($leave) {
             return [
                 'id' => $leave->id,
                 'leave_type' => ucwords(str_replace('_', ' ', $leave->leave_type)),
