@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { CircleCheckBig, Search, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +9,9 @@ import {
 import AddPayrollDialog from "@/components/AddPayrollDialog";
 import DataTable from "@/components/DataTable";
 import Layout from "@/layouts/Layout";
+import SendPayrollRecordDialog from "@/components/SendPayrollRecordDialog";
+import DeletePayrollRecordDialog from "@/components/DeletePayrollRecordDialog";
+import { useState } from "react";
 
 const payrollColumns = [
     { key: "name", label: "Name" },
@@ -21,9 +24,32 @@ const payrollColumns = [
     { key: "net_pay", label: "Net Pay" },
 ];
 
-const payrollData = [];
+export default function PayrollPage({ employees, payrollData }) {
+    const [sendPayrollEmployee, setSendPayrollEmployee] = useState(null);``
+    const [deleteEmployee, setDeleteEmployee] = useState(null);
+    const [isSendPayrollDialogOpen, setIsSendPayrollDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-export default function PayrollPage({ employees }) {
+    const openSendPayroll = (payroll) => {
+        setSendPayrollEmployee(payroll);
+        setIsSendPayrollDialogOpen(true);
+    };
+
+    const closeSendPayroll = () => {
+        setSendPayrollEmployee(null);
+        setIsSendPayrollDialogOpen(false);
+    };
+
+    const openDeleteDialog = (payroll) => {
+        setDeleteEmployee(payroll);
+        setIsDeleteDialogOpen(true);
+    };
+
+    const closeDeleteDialog = () => {
+        setDeleteEmployee(null);
+        setIsDeleteDialogOpen(false);
+    };
+
     return (
         <>
             <div className="space-y-4">
@@ -59,13 +85,13 @@ export default function PayrollPage({ employees }) {
                     actions={(row) => (
                         <>
                             <Button
-                                onClick={() => editEmployee(row.id)}
-                                className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
+                                onClick={() => openSendPayroll(row)}
+                                className="bg-transparent text-[#41D56D] hover:bg-[#E6F9F0] hover:text-[#1B5E34] active:bg-[#C8F2D9]"
                             >
                                 <CircleCheckBig />
                             </Button>
                             <Button
-                                onClick={() => deleteEmployee(row.id)}
+                                onClick={() => openDeleteDialog(row)}
                                 className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"
                             >
                                 <Trash2 />
@@ -73,6 +99,24 @@ export default function PayrollPage({ employees }) {
                         </>
                     )}
                 />
+
+                {sendPayrollEmployee && (
+                    <SendPayrollRecordDialog
+                        open={isSendPayrollDialogOpen}
+                        onOpenChange={setIsSendPayrollDialogOpen}
+                        payroll={sendPayrollEmployee}
+                        onClose={closeSendPayroll}
+                    />
+                )}
+
+                {deleteEmployee && (
+                    <DeletePayrollRecordDialog
+                        open={isDeleteDialogOpen}
+                        onOpenChange={setIsDeleteDialogOpen}
+                        payroll={deleteEmployee}
+                        onClose={closeDeleteDialog}
+                    />
+                )}
             </div>
         </>
     );

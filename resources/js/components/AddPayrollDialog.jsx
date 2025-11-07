@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -17,22 +18,42 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import { Form } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 
 export default function AddPayrollDialog({ employees }) {
+    const [open, setOpen] = useState(false);
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        employee_id: "",
+        period_start: "",
+        basic_salary: "",
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post("/hr/payroll/add", {
+            onSuccess: () => {
+                setOpen(false);
+                reset();
+                toast.success("Payroll record added successfully!");
+            },
+        });
+    }
+
     return (
-        <Dialog>
-            <Form>
-                <DialogTrigger asChild>
-                    <Button className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]">
-                        <Plus />
-                        Add Payroll
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]">
+                    <Plus />
+                    Add Payroll
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">
                             Add Payroll Record
@@ -41,7 +62,7 @@ export default function AddPayrollDialog({ employees }) {
                     </DialogHeader>
                     <div className="flex flex-col gap-y-2 w-full">
                         <Label htmlFor="employee_name">Employee Name</Label>
-                        <Select>
+                        <Select value={data.employee_id} onValueChange={(value) => setData("employee_id", value)}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select employee" />
                             </SelectTrigger>
@@ -49,7 +70,7 @@ export default function AddPayrollDialog({ employees }) {
                                 <SelectGroup>
                                     <SelectLabel>Employees</SelectLabel>
                                     {employees.map((employee) => (
-                                        <SelectItem key={employee.id} value={employee.id}>
+                                        <SelectItem key={employee.id} value={String(employee.id)}>
                                             {employee.name}
                                         </SelectItem>
                                     ))}
@@ -61,7 +82,12 @@ export default function AddPayrollDialog({ employees }) {
                         {/* Period start */}
                         <div className="flex flex-col gap-y-2">
                             <Label htmlFor="period_start">Period Start</Label>
-                            <Input id="period_start" type="date" required />
+                            <Input id="period_start" type="date" required value={data.period_start} onChange={(e) => setData("period_start", e.target.value)} />
+                            {errors.period_start && (
+                                <span className="text-sm text-red-500">
+                                    {errors.period_start}
+                                </span>
+                            )}
                         </div>
 
                         {/* Basic Salary */}
@@ -71,44 +97,16 @@ export default function AddPayrollDialog({ employees }) {
                                 id="basic_salary"
                                 type="number"
                                 placeholder="0"
+                                value={data.basic_salary}
+                                onChange={(e) => setData("basic_salary", e.target.value)}
                                 required
                             />
+                            {errors.basic_salary && (
+                                <span className="text-sm text-red-500">
+                                    {errors.basic_salary}
+                                </span>
+                            )}
                         </div>
-
-                        {/* Overtime Pay */}
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="overtime_pay">Overtime Pay</Label>
-                            <Input
-                                id="overtime_pay"
-                                type="number"
-                                placeholder="0"
-                                required
-                            />
-                        </div>
-
-                        {/* Deductions */}
-                        <div className="flex flex-col gap-y-2">
-                            <Label htmlFor="deductions">Deductions</Label>
-                            <Input
-                                id="deductions"
-                                type="number"
-                                placeholder="0"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    {/* Tax Percentage */}
-                    <div className="flex flex-col gap-y-2">
-                        <Label htmlFor="tax_percentage">
-                            Tax Percentage
-                        </Label>
-                        <Input
-                            id="tax_percentage"
-                            type="number"
-                            placeholder="0"
-                            required
-                        />
                     </div>
                     
                     <DialogFooter>
@@ -122,8 +120,8 @@ export default function AddPayrollDialog({ employees }) {
                             Create
                         </Button>
                     </DialogFooter>
-                </DialogContent>
-            </Form>
+                </form>
+            </DialogContent>
         </Dialog>
     );
 }
