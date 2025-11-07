@@ -94,7 +94,7 @@ class PayrollController extends Controller
             'net_pay' => $netPay,
         ]);
 
-        return redirect()->route('hr.payroll');
+        return redirect()->back();
     }
 
     public function send($id)
@@ -105,7 +105,7 @@ class PayrollController extends Controller
             'status' => 'paid',
         ]);
 
-        return redirect()->route('hr.payroll');
+        return redirect()->back();
     }
 
     public function destroy($id)
@@ -113,6 +113,6 @@ class PayrollController extends Controller
         $payroll = Payroll::findOrFail($id);
         $payroll->delete();
 
-        return redirect()->route('hr.payroll');
+        return redirect()->back();
     }
 }

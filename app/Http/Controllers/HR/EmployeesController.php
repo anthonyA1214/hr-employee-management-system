@@ -16,13 +16,12 @@ class EmployeesController extends Controller
 
         $employees = User::select('id', 'first_name', 'last_name', 'email', 'contact_number' ,'position', 'department', 'hired_at', 'address')
         ->where('role', 'employee')
+        ->with(['timekeepings' => function ($query) use ($today) {
+            $query->whereDate('date', $today)
+                  ->whereNotNull('time_in');
+        }])
         ->get()
-        ->map(function ($employee) use ($today) {
-            $hasTimedIn = $employee->timekeepings()
-            ->whereDate('date', $today)
-            ->whereNotNull('time_in')
-            ->exists();
-
+        ->map(function ($employee) {
             return [
                 'id' => $employee->id,
                 'first_name' => $employee->first_name,
@@ -34,7 +33,7 @@ class EmployeesController extends Controller
                 'department' => $employee->department,
                 'hired_at' => $employee->hired_at,
                 'address' => $employee->address,
-                'status' => $hasTimedIn ? 'Active' : 'Inactive',
+                'status' => $employee->timekeepings->isNotEmpty() ? 'Active' : 'Inactive',
             ];
         });
 
@@ -60,7 +59,7 @@ class EmployeesController extends Controller
 
         User::create($validatedAttributes);
 
-        return redirect()->route('hr.employees');
+        return redirect()->back();
     }
 
     public function update(Request $request, $id)
@@ -80,7 +79,7 @@ class EmployeesController extends Controller
 
         $employee->update($validatedAttributes);
 
-        return redirect()->route('hr.employees');
+        return redirect()->back();
     }
 
     public function destroy($id)
@@ -88,6 +87,6 @@ class EmployeesController extends Controller
         $employee = User::findOrFail($id);
         $employee->delete();
 
-        return redirect()->route('hr.employees');
+        return redirect()->back();
     }
 }

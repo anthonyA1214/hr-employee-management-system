@@ -12,22 +12,22 @@ class LeaveRequestsController extends Controller
     public function index()
     {
         $leaveRequestsData = Leave::with('employee')
-            ->where('status', 'pending')
-            ->get()
-            ->map(function ($leave) {
-                return [
-                    'id' => $leave->id,
-                    'first_name' => $leave->employee->first_name,
-                    'last_name' => $leave->employee->last_name,
-                    'name' => $leave->employee->last_name . ', ' . $leave->employee->first_name,
-                    'leave_type' => ucwords(str_replace('_', ' ', $leave->leave_type)),
-                    'start_date' => $leave->start_date,
-                    'end_date' => $leave->end_date,
-                    'days' => $leave->days,
-                    'reason' => $leave->reason ?? 'N/A',
-                    'status' => ucfirst($leave->status),
-                ];
-            });
+        ->where('status', 'pending')
+        ->get()
+        ->map(function ($leave) {
+            return [
+                'id' => $leave->id,
+                'first_name' => $leave->employee->first_name,
+                'last_name' => $leave->employee->last_name,
+                'name' => $leave->employee->last_name . ', ' . $leave->employee->first_name,
+                'leave_type' => ucwords(str_replace('_', ' ', $leave->leave_type)),
+                'start_date' => $leave->start_date,
+                'end_date' => $leave->end_date,
+                'days' => $leave->days,
+                'reason' => $leave->reason ?? 'N/A',
+                'status' => ucfirst($leave->status),
+            ];
+        });
 
         return Inertia::render('hr/LeaveRequestsPage', [
             'leaveRequestsData' => $leaveRequestsData,
@@ -40,7 +40,7 @@ class LeaveRequestsController extends Controller
         $leaveRequest->status = 'approved';
         $leaveRequest->save();
 
-        return redirect()->route('hr.leave-requests');
+        return redirect()->back();
     }
 
     public function reject($id)
@@ -49,6 +49,6 @@ class LeaveRequestsController extends Controller
         $leaveRequest->status = 'rejected';
         $leaveRequest->save();
 
-        return redirect()->route('hr.leave-requests');
+        return redirect()->back();
     }
 }

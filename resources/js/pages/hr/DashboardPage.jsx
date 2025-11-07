@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
     CalendarCheck2,
     Check,
@@ -15,7 +16,12 @@ import DataTable from "@/components/DataTable";
 import DashboardCard from "@/components/DashboardCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Layout from "@/layouts/Layout";
-
+import EditEmployeeDialog from "@/components/EditEmployeeDialog";
+import DeleteEmployeeDialog from "@/components/DeleteEmployeeDialog";
+import SendPayrollRecordDialog from "@/components/SendPayrollRecordDialog";
+import DeletePayrollRecordDialog from "@/components/DeletePayrollRecordDialog";
+import ApproveLeaveRequestDialog from "@/components/ApproveLeaveRequestDialog";
+import RejectLeaveRequestDialog from "@/components/RejectLeaveRequestDialog";
 
 const employeeColumns = [
     { key: "name", label: "Name" },
@@ -44,11 +50,85 @@ const leaveRequestColumns = [
     { key: "reason", label: "Reason" },
 ];
 
-const employeeData = [];
-const payrollData = [];
-const leaveRequestData = [];
+export default function DashboardPage({ counts, employeesData, payrollData, leaveRequestData }) {
+    // Employee Dialog States
+    const [editEmployee, setEditEmployee] = useState(null);
+    const [deleteEmployee, setDeleteEmployee] = useState(null);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-export default function DashboardPage() {
+    const openEditDialog = (employee) => {
+        setEditEmployee(employee);
+        setIsEditDialogOpen(true);
+    };
+
+    const closeEditDialog = () => {
+        setEditEmployee(null);
+        setIsEditDialogOpen(false);
+    };
+
+    const openDeleteDialog = (employee) => {
+        setDeleteEmployee(employee);
+        setIsDeleteDialogOpen(true);
+    };
+
+    const closeDeleteDialog = () => {
+        setDeleteEmployee(null);
+        setIsDeleteDialogOpen(false);
+    };
+
+    // Payroll Dialog States
+    const [sendPayrollEmployee, setSendPayrollEmployee] = useState(null);
+    const [deletePayrollEmployee, setDeletePayrollEmployee] = useState(null);
+    const [isSendPayrollDialogOpen, setIsSendPayrollDialogOpen] = useState(false);
+    const [isDeletePayrollDialogOpen, setIsDeletePayrollDialogOpen] = useState(false);
+
+    const openSendPayrollDialog = (payroll) => {
+        setSendPayrollEmployee(payroll);
+        setIsSendPayrollDialogOpen(true);
+    };
+
+    const closeSendPayrollDialog = () => {
+        setSendPayrollEmployee(null);
+        setIsSendPayrollDialogOpen(false);
+    };
+
+    const openDeletePayrollDialog = (payroll) => {
+        setDeletePayrollEmployee(payroll);
+        setIsDeletePayrollDialogOpen(true);
+    };
+
+    const closeDeletePayrollDialog = () => {
+        setDeletePayrollEmployee(null);
+        setIsDeletePayrollDialogOpen(false);
+    };
+
+    // Leave Request Dialog States
+    const [approveLeaveRequest, setApproveLeaveRequest] = useState(null);
+    const [rejectLeaveRequest, setRejectLeaveRequest] = useState(null);
+    const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
+    const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+
+    const openApproveDialog = (leaveRequest) => {
+        setApproveLeaveRequest(leaveRequest);
+        setIsApproveDialogOpen(true);
+    }
+
+    const closeApproveDialog = () => {
+        setApproveLeaveRequest(null);
+        setIsApproveDialogOpen(false);
+    }
+
+    const openRejectDialog = (leaveRequest) => {
+        setRejectLeaveRequest(leaveRequest);
+        setIsRejectDialogOpen(true);
+    }
+
+    const closeRejectDialog = () => {
+        setRejectLeaveRequest(null);
+        setIsRejectDialogOpen(false);
+    }
+
     return (
         <>
             <div className="flex flex-col gap-y-8">
@@ -57,22 +137,22 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-8">
                     <DashboardCard
                         icon={UsersRound}
-                        value="172"
+                        value={counts.totalEmployees}
                         label="Total Employees"
                     />
                     <DashboardCard
                         icon={UserCheck2}
-                        value="128"
+                        value={counts.activeEmployees}
                         label="Active Users"
                     />
                     <DashboardCard
                         icon={CalendarCheck2}
-                        value="12"
+                        value={counts.pendingLeaves}
                         label="Pending Leave Request"
                     />
                     <DashboardCard
                         icon={FileText}
-                        value="17"
+                        value={counts.totalMemos}
                         label="Total Memos"
                     />
                 </div>
@@ -92,18 +172,18 @@ export default function DashboardPage() {
                         <TabsContent value="employees">
                             <DataTable
                                 columns={employeeColumns}
-                                data={employeeData}
+                                data={employeesData}
                                 actions={(row) => (
                                     <>
                                         <Button
-                                            onClick={() => editEmployee(row.id)}
+                                            onClick={() => openEditDialog(row)}
                                             className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
                                         >
                                             <PenSquare />
                                         </Button>
                                         <Button
                                             onClick={() =>
-                                                deleteEmployee(row.id)
+                                                openDeleteDialog(row)
                                             }
                                             className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"
                                         >
@@ -120,15 +200,13 @@ export default function DashboardPage() {
                                 actions={(row) => (
                                     <>
                                         <Button
-                                            onClick={() => editEmployee(row.id)}
-                                            className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
+                                            onClick={() => openSendPayrollDialog(row)}
+                                            className="bg-transparent text-[#41D56D] hover:bg-[#E6F9F0] hover:text-[#1B5E34] active:bg-[#C8F2D9]"
                                         >
                                             <CircleCheckBig />
                                         </Button>
                                         <Button
-                                            onClick={() =>
-                                                deleteEmployee(row.id)
-                                            }
+                                            onClick={() => openDeletePayrollDialog(row)}
                                             className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"
                                         >
                                             <Trash2 />
@@ -144,15 +222,13 @@ export default function DashboardPage() {
                                 actions={(row) => (
                                     <>
                                         <Button
-                                            onClick={() => editEmployee(row.id)}
-                                            className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
+                                            onClick={() => openApproveDialog(row)}
+                                            className="bg-transparent text-[#41D56D] hover:bg-[#E6F9F0] hover:text-[#1B5E34] active:bg-[#C8F2D9]"
                                         >
                                             <Check />
                                         </Button>
                                         <Button
-                                            onClick={() =>
-                                                deleteEmployee(row.id)
-                                            }
+                                            onClick={() => openRejectDialog(row)}
                                             className="bg-transparent text-[#FF0000] hover:bg-[#FFEBEE] hover:text-[#B71C1C] active:bg-[#FFCDD2]"
                                         >
                                             <X />
@@ -163,6 +239,61 @@ export default function DashboardPage() {
                         </TabsContent>
                     </Tabs>
                 </div>
+                {/* Employee Dialogs */}
+                {editEmployee && (
+                    <EditEmployeeDialog
+                        open={isEditDialogOpen}
+                        onOpenChange={setIsEditDialogOpen}
+                        employee={editEmployee}
+                        onClose={closeEditDialog}
+                    />
+                )}
+
+                {deleteEmployee && (
+                    <DeleteEmployeeDialog
+                        open={isDeleteDialogOpen}
+                        onOpenChange={setIsDeleteDialogOpen}
+                        employee={deleteEmployee}
+                        onClose={closeDeleteDialog}
+                    />
+                )}
+
+                {/* Payroll Dialogs */}
+                {sendPayrollEmployee && (
+                    <SendPayrollRecordDialog
+                        open={isSendPayrollDialogOpen}
+                        onOpenChange={setIsSendPayrollDialogOpen}
+                        payroll={sendPayrollEmployee}
+                        onClose={closeSendPayrollDialog}
+                    />
+                )}
+
+                {deletePayrollEmployee && (
+                    <DeletePayrollRecordDialog
+                        open={isDeletePayrollDialogOpen}
+                        onOpenChange={setIsDeletePayrollDialogOpen}
+                        payroll={deletePayrollEmployee}
+                        onClose={closeDeletePayrollDialog}
+                    />
+                )}
+
+                {/* Leave Requests Dialogs */}
+                {approveLeaveRequest && (
+                    <ApproveLeaveRequestDialog
+                        open={isApproveDialogOpen}
+                        onOpenChange={setIsApproveDialogOpen}
+                        leaveRequest={approveLeaveRequest}
+                        onClose={closeApproveDialog}
+                    />
+                )}
+                {rejectLeaveRequest && (
+                    <RejectLeaveRequestDialog
+                        open={isRejectDialogOpen}
+                        onOpenChange={setIsRejectDialogOpen}
+                        leaveRequest={rejectLeaveRequest}
+                        onClose={closeRejectDialog}
+                    />
+                )}
             </div>
         </>
     );

@@ -63,7 +63,7 @@ export default function SendMemoDialog({ employees }) {
                         Send Memo
                     </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="max-h-[80vh] overflow-y-auto">
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                         <DialogHeader>
                             <DialogTitle className="text-2xl">
@@ -120,6 +120,7 @@ export default function SendMemoDialog({ employees }) {
                                 placeholder="Enter memo body"
                                 value={data.body}
                                 onChange={(e) => setData('body', e.target.value)}
+                                className="min-h-40 max-h-60 overflow-y-auto"
                                 required
                             />
                             {errors.body && (
