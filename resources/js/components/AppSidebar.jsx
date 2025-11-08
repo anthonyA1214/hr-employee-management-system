@@ -26,8 +26,6 @@ import {
 
 import { Link, usePage, Form } from "@inertiajs/react";
 
-import fullLogo from "@/assets/full-logo.svg";
-
 export function AppSidebar({ user }) {
     const mainItems = user.role === "hr" ? [
         { href: "/hr/dashboard", icon: LayoutDashboard, label: "Dashboard", },
@@ -53,7 +51,7 @@ export function AppSidebar({ user }) {
     return (
         <Sidebar collapsible="icon" className="text-[#F2F2F2]">
             <SidebarHeader className="flex items-center justify-center">
-                <img src={fullLogo} alt="Full Logo" className="w-48 h-auto" />
+                <img src="https://res.cloudinary.com/dha8kpdrp/image/upload/v1762624680/full-logo-D2sb1z0W_hw6tyl.svg" alt="Full Logo" className="w-48 h-auto" />
             </SidebarHeader>
             <SidebarContent>
                 <Separator className="my-4 bg-[#747474]" />

@@ -1,4 +1,3 @@
-import fullLogo from "@/assets/dark-full-logo.svg";
 import { Mail, Lock } from "lucide-react";
 
 import { Form } from "@inertiajs/react";
@@ -28,7 +27,7 @@ export default function LoginPage() {
                     {({ errors, processing }) => (
                         <Card className="w-96">
                             <CardHeader className="flex justify-center">
-                                <img src={fullLogo} className="w-36" />
+                                <img src="https://res.cloudinary.com/dha8kpdrp/image/upload/v1762624680/dark-full-logo-n1v8S2DS_ryix3b.svg" className="w-36" />
                             </CardHeader>
                             <CardContent>
                                 <div className="flex flex-col gap-6">

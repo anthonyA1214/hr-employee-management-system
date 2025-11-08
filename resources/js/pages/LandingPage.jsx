@@ -1,20 +1,15 @@
-import bgImg from '@/assets/landing-bg.png';
-import fullLogo from '@/assets/full-logo.svg';
 import { Link, usePage } from '@inertiajs/react';
 
 export default function LandingPage() {
     const { auth } = usePage().props;
     const user = auth.user;
 
-    console.log('Authenticated user:', user);
-    console.log('User role:', user ? user.role : 'Guest');
-
     const href = user ? (user.role === 'hr' ? '/hr/dashboard' : '/employee/dashboard') : '/login';
 
     return (
         <div
             className="relative h-screen bg-cover bg-center font-['Hanken_Grotesk'] text-white overflow-hidden"
-            style={{ backgroundImage: `url(${bgImg})` }}
+            style={{ backgroundImage: `url(https://res.cloudinary.com/dha8kpdrp/image/upload/v1762624806/PixVerse_Image_Effect_prompt_enhance_the_quali_1_lsl9ea.png)` }}
         >
             
         {/* === Gradient overlays for depth === */}
@@ -25,7 +20,7 @@ export default function LandingPage() {
         <div className="relative z-10 flex flex-col justify-center h-full w-full md:w-1/2 px-10 md:px-20 py-16 text-left space-y-8 animate-fadeInSlow">
             {/* Logo with soft motion */}
             <img
-            src={fullLogo}
+            src="https://res.cloudinary.com/dha8kpdrp/image/upload/v1762624680/full-logo-D2sb1z0W_hw6tyl.svg"
             alt="HR Employee Management System Logo"
             className="w-44 md:w-52 mb-2 select-none drop-shadow-2xl animate-slideDown delay-[100ms]"
             />
