@@ -64,6 +64,6 @@ class LeaveRequestsController extends Controller
             'status' => $status,
         ]);
 
-        return redirect()->route('employee.leave-requests');
+        return redirect()->back();
     }
 }

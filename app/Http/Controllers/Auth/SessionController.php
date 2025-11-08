@@ -34,11 +34,11 @@ class SessionController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'hr') {
-            return redirect()->intended('/hr/dashboard');
+            return redirect('/hr/dashboard');
         }
 
         if ($user->role === 'employee') {
-            return redirect()->intended('/employee/dashboard');
+            return redirect('/employee/dashboard');
         }
 
         // Default fallback (optional)

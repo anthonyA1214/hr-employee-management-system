@@ -49,6 +49,6 @@ class SettingsController extends Controller
 
         $user->update($validatedAttributes);
 
-        return redirect()->route('settings.index');
+        return redirect()->back();
     }
 }

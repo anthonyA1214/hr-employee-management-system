@@ -65,6 +65,6 @@ class MemosController extends Controller
             $memo->recipients()->attach($validatedAttributes['employee_id']);
         }
 
-        return redirect()->route('hr.memos');
+        return redirect()->back();
     }
 }

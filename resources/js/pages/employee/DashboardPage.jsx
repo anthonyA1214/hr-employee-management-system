@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import {
-    CalendarDays,
     CircleCheck,
     FileText,
     Hourglass,
@@ -56,12 +55,7 @@ export default function DashboardPage({ counts, payrollData, leaveRequestsData, 
             <div className="flex flex-col gap-y-8">
                 <h1 className="text-3xl font-bold">Dashboard Overview</h1>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-8">
-                    <DashboardCard
-                        icon={CalendarDays}
-                        value="15"
-                        label="Leave Balance"
-                    />
+                <div className="grid grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-8">
                     <DashboardCard
                         icon={Hourglass}
                         value={counts.pendingLeaves}
