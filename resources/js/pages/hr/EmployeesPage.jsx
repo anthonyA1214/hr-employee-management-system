@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { PenSquare, Search, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -7,20 +7,22 @@ import {
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import AddNewEmployeeDialog from "@/components/AddNewEmployeeDialog";
 import DataTable from "@/components/DataTable";
 import DeleteEmployeeDialog from "@/components/DeleteEmployeeDialog";
 import EditEmployeeDialog from "@/components/EditEmployeeDialog";
 import Layout from "@/layouts/Layout";
+import { Link, router } from "@inertiajs/react";
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 const employeeColumns = [
     { key: "name", label: "Name" },
@@ -33,9 +35,26 @@ const employeeColumns = [
     { key: "status", label: "Status" },
 ];
 
+const getVisiblePages = (current, last) => {
+  const delta = 2; // pages before and after current
+  let start = Math.max(1, current - delta);
+  let end = Math.min(last, current + delta);
+
+  // Adjust for edges
+  if (current <= delta) end = Math.min(last, 5);
+  if (current + delta > last) start = Math.max(1, last - 4);
+
+  const pages = [];
+  for (let i = start; i <= end; i++) pages.push(i);
+  return pages;
+};
+
 export default function EmployeesPage({ employees }) {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filterBy, setFilterBy] = useState("name");
+    const [query, setQuery] = useState(employees?.search || "");
+
+    const handleSearch = () => {
+        router.get("/hr/employees", { query }, { preserveState: true, replace: true });
+    };
 
     const [editEmployee, setEditEmployee] = useState(null);
     const [deleteEmployee, setDeleteEmployee] = useState(null);
@@ -62,14 +81,6 @@ export default function EmployeesPage({ employees }) {
         setIsDeleteDialogOpen(false);
     };
 
-    const filteredEmployees = useMemo(() => {
-        return employees.filter((employee) =>
-            employee[filterBy]
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase())
-        );
-    }, [employees, searchQuery, filterBy]);
-
     return (
         <>
             <div className="space-y-4">
@@ -84,43 +95,31 @@ export default function EmployeesPage({ employees }) {
                             id="query"
                             name="query"
                             type="text"
-                            placeholder="Search by name, email, or department..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search by name..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSearch();
+                                }
+                            }}
                         />
                         <InputGroupAddon>
                             <Search />
                         </InputGroupAddon>
                     </InputGroup>
 
-                    <Select defaultValue="name" value={filterBy} onValueChange={setFilterBy}>
-                        <SelectTrigger className="w-[150px]">
-                            <SelectValue placeholder="Filter by" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Filter by</SelectLabel>
-                                <SelectItem value="name">Name</SelectItem>
-                                <SelectItem value="email">Email</SelectItem>
-                                <SelectItem value="department">Department</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-
                     <Button
-                        onClick={() => {
-                            setSearchQuery("");
-                            setFilterBy("name");
-                        }}
                         className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]"
+                        onClick={handleSearch}
                     >
-                        Clear
+                        Search
                     </Button>
                 </div>
 
                 <DataTable
                     columns={employeeColumns}
-                    data={filteredEmployees}
+                    data={employees.data}
                     actions={(row) => (
                         <>
                             <Button
@@ -138,6 +137,87 @@ export default function EmployeesPage({ employees }) {
                         </>
                     )}
                 />
+
+                <div className="flex justify-between items-center mt-4">
+                    <div>
+                        <span className="text-sm opacity-50">
+                            Showing {employees.from} to {employees.to} of {employees.total} employees
+                        </span>
+                    </div>
+
+                    <div className="select-none">
+                        <Pagination>
+                            <PaginationContent>
+                                {/* Previous */}
+                                <PaginationItem>
+                                    {employees.prev_page_url ? (
+                                        <Link href={employees.prev_page_url}>
+                                            <PaginationPrevious className="hover:bg-[#30A1EF] hover:text-[#F2F2F2]" />
+                                        </Link>
+                                    ) : (
+                                        <PaginationPrevious disabled className="opacity-50 hover:bg-transparent"/>
+                                    )}
+                                </PaginationItem>
+
+                                {/* First page + ellipsis */}
+                                {employees.current_page > 3 && (
+                                <>
+                                    <PaginationItem>
+                                        <Link href={`?page=1`}>
+                                            <PaginationLink>1</PaginationLink>
+                                        </Link>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationEllipsis />
+                                    </PaginationItem>
+                                </>
+                                )}
+
+                                {/* Visible pages */}
+                                {getVisiblePages(employees.current_page, employees.last_page).map((page) => (
+                                <PaginationItem key={page}>
+                                    {page === employees.current_page ? (
+                                    <PaginationLink className="bg-[#018CEF] text-[#F2F2F2] hover:bg-[#018CEF] hover:text-[#F2F2F2] active:bg-[#018CEF] active:text-[#F2F2F2]">
+                                        {page}
+                                    </PaginationLink>
+                                    ) : (
+                                    <Link href={`?page=${page}`}>
+                                        <PaginationLink className="hover:bg-[#30A1EF] hover:text-[#F2F2F2]">
+                                            {page}
+                                        </PaginationLink>
+                                    </Link>
+                                    )}
+                                </PaginationItem>
+                                ))}
+
+                                {/* Last page + ellipsis */}
+                                {employees.current_page < employees.last_page - 2 && (
+                                <>
+                                    <PaginationItem>
+                                        <PaginationEllipsis />
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <Link href={`?page=${employees.last_page}`}>
+                                            <PaginationLink>{employees.last_page}</PaginationLink>
+                                        </Link>
+                                    </PaginationItem>
+                                </>
+                                )}
+
+                                {/* Next */}
+                                <PaginationItem>
+                                    {employees.next_page_url ? (
+                                        <Link href={employees.next_page_url}>
+                                            <PaginationNext className="hover:bg-[#30A1EF] hover:text-[#F2F2F2]" />
+                                        </Link>
+                                    ) : (
+                                        <PaginationNext disabled className="opacity-50 hover:bg-transparent"/>
+                                    )}
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
+                </div>
 
                 {editEmployee && (
                     <EditEmployeeDialog
