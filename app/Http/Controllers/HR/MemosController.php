@@ -24,8 +24,8 @@ class MemosController extends Controller
 
         $memosData = Memo::with('recipients')
         ->orderBy('sent_at', 'desc')
-        ->get()
-        ->map(function ($memo) {
+        ->paginate(10)
+        ->through(function ($memo) {
             return [
                 'id' => $memo->id,
                 'subject' => $memo->subject,

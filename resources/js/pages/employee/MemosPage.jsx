@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import DataTable from "@/components/DataTable";
 import ViewMemoDialog from "@/components/ViewMemoDialog";
 import Layout from "@/layouts/Layout";
+import PaginationNav from "@/components/PaginationNav";
 
 const memosColumns = [
     { key: "issued_by", label: "Issued By" },
@@ -29,7 +30,7 @@ export default function MemosPage({ memosData }) {
 
                 <DataTable 
                     columns={memosColumns} 
-                    data={memosData} 
+                    data={memosData.data} 
                     actions={(row) => (
                         <>
                             <Button
@@ -41,6 +42,18 @@ export default function MemosPage({ memosData }) {
                         </>
                     )}   
                 />
+
+                <div className="flex justify-between items-center mt-4">
+                    <div>
+                        <span className="text-sm opacity-50">
+                            Showing {memosData.from} to {memosData.to} of {memosData.total} memos
+                        </span>
+                    </div>
+
+                    <div className="select-none">
+                        <PaginationNav data={memosData} />
+                    </div>
+                </div>
 
                 {viewMemo && (
                     <ViewMemoDialog

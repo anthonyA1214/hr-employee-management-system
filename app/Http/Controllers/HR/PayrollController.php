@@ -11,8 +11,10 @@ use Inertia\Inertia;
 
 class PayrollController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('query');
+
         $employees = User::select('id', 'first_name', 'last_name')
         ->where('role', 'employee')
         ->get()
@@ -24,10 +26,17 @@ class PayrollController extends Controller
         });
 
         $payrollData = Payroll::with('employee')
+        ->when($search, function ($query, $search) {
+            $query->whereHas('employee', function ($subQuery) use ($search) {
+                $subQuery->where('first_name', 'like', '%' . $search . '%')
+                         ->orWhere('last_name', 'like', '%' . $search . '%');
+            });
+        })
         ->where('status', 'pending')
         ->orderBy('created_at', 'desc')
-        ->get()
-        ->map(function ($payroll) {
+        ->paginate(10)
+        ->withQueryString()
+        ->through(function ($payroll) {
             return [
                 'id' => $payroll->id,
                 'name' => $payroll->employee->last_name . ', ' . $payroll->employee->first_name,

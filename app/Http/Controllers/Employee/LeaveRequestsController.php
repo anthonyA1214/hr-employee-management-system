@@ -13,7 +13,9 @@ class LeaveRequestsController extends Controller
     {
         $user = $request->user();
 
-        $leaveRequestsData = $user->leaves()->get()->map(function ($leave) {
+        $leaveRequestsData = $user->leaves()
+        ->paginate(10)
+        ->through(function ($leave) {
             return [
                 'id' => $leave->id,
                 'leave_type' => ucwords(str_replace('_', ' ', $leave->leave_type)),

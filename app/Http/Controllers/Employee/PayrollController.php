@@ -16,7 +16,7 @@ class PayrollController extends Controller
         $payrollData = Payroll::where('employee_id', $user->id)
         ->where('status', 'paid')
         ->orderBy('created_at', 'desc')
-        ->get();
+        ->paginate(10);
         
         return Inertia::render('employee/PayrollPage', [
             'payrollData' => $payrollData,

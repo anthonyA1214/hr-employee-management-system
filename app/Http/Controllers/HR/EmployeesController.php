@@ -10,10 +10,10 @@ use Inertia\Inertia;
 
 class EmployeesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $today = now()->toDateString();
-        $search = request()->input('query');
+        $search = $request->input('query');
 
         $employees = User::select('id', 'first_name', 'last_name', 'email', 'contact_number' ,'position', 'department', 'hired_at', 'address')
         ->where('role', 'employee')
@@ -45,30 +45,6 @@ class EmployeesController extends Controller
                 'status' => $employee->timekeepings->isNotEmpty() ? 'Active' : 'Inactive',
             ];
         });
-
-        // $employees = User::select('id', 'first_name', 'last_name', 'email', 'contact_number' ,'position', 'department', 'hired_at', 'address')
-        // ->where('role', 'employee')
-        // ->with(['timekeepings' => function ($query) use ($today) {
-        //     $query->whereDate('date', $today)
-        //           ->whereNotNull('time_in');
-        // }])
-        // ->orderBy('last_name')
-        // ->paginate(10)
-        // ->through(function ($employee) {
-        //     return [
-        //         'id' => $employee->id,
-        //         'first_name' => $employee->first_name,
-        //         'last_name' => $employee->last_name,
-        //         'name' => $employee->last_name . ', ' . $employee->first_name,
-        //         'email' => $employee->email,
-        //         'contact_number' => $employee->contact_number,
-        //         'position' => $employee->position,
-        //         'department' => $employee->department,
-        //         'hired_at' => $employee->hired_at,
-        //         'address' => $employee->address,
-        //         'status' => $employee->timekeepings->isNotEmpty() ? 'Active' : 'Inactive',
-        //     ];
-        // });
 
         return Inertia::render('hr/EmployeesPage', [
             'employees' => $employees,

@@ -21,8 +21,8 @@ class TimekeepingController extends Controller
         
         $timekeepingData = Timekeeping::where('employee_id', $user->id)
         ->orderBy('date', 'desc')
-        ->get()
-        ->map(function ($record) {
+        ->paginate(10)
+        ->through(function ($record) {
             if ($record->time_in && $record->time_out) {
                 $timeIn = Carbon::parse($record->time_in);
                 $timeOut = Carbon::parse($record->time_out);

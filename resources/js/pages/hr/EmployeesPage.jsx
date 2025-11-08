@@ -12,17 +12,8 @@ import DataTable from "@/components/DataTable";
 import DeleteEmployeeDialog from "@/components/DeleteEmployeeDialog";
 import EditEmployeeDialog from "@/components/EditEmployeeDialog";
 import Layout from "@/layouts/Layout";
-import { Link, router } from "@inertiajs/react";
-
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
+import { router } from "@inertiajs/react";
+import PaginationNav from "@/components/PaginationNav";
 
 const employeeColumns = [
     { key: "name", label: "Name" },
@@ -34,20 +25,6 @@ const employeeColumns = [
     { key: "address", label: "Address" },
     { key: "status", label: "Status" },
 ];
-
-const getVisiblePages = (current, last) => {
-  const delta = 2; // pages before and after current
-  let start = Math.max(1, current - delta);
-  let end = Math.min(last, current + delta);
-
-  // Adjust for edges
-  if (current <= delta) end = Math.min(last, 5);
-  if (current + delta > last) start = Math.max(1, last - 4);
-
-  const pages = [];
-  for (let i = start; i <= end; i++) pages.push(i);
-  return pages;
-};
 
 export default function EmployeesPage({ employees }) {
     const [query, setQuery] = useState(employees?.search || "");
@@ -146,76 +123,7 @@ export default function EmployeesPage({ employees }) {
                     </div>
 
                     <div className="select-none">
-                        <Pagination>
-                            <PaginationContent>
-                                {/* Previous */}
-                                <PaginationItem>
-                                    {employees.prev_page_url ? (
-                                        <Link href={employees.prev_page_url}>
-                                            <PaginationPrevious className="hover:bg-[#30A1EF] hover:text-[#F2F2F2]" />
-                                        </Link>
-                                    ) : (
-                                        <PaginationPrevious disabled className="opacity-50 hover:bg-transparent"/>
-                                    )}
-                                </PaginationItem>
-
-                                {/* First page + ellipsis */}
-                                {employees.current_page > 3 && (
-                                <>
-                                    <PaginationItem>
-                                        <Link href={`?page=1`}>
-                                            <PaginationLink>1</PaginationLink>
-                                        </Link>
-                                    </PaginationItem>
-                                    <PaginationItem>
-                                        <PaginationEllipsis />
-                                    </PaginationItem>
-                                </>
-                                )}
-
-                                {/* Visible pages */}
-                                {getVisiblePages(employees.current_page, employees.last_page).map((page) => (
-                                <PaginationItem key={page}>
-                                    {page === employees.current_page ? (
-                                    <PaginationLink className="bg-[#018CEF] text-[#F2F2F2] hover:bg-[#018CEF] hover:text-[#F2F2F2] active:bg-[#018CEF] active:text-[#F2F2F2]">
-                                        {page}
-                                    </PaginationLink>
-                                    ) : (
-                                    <Link href={`?page=${page}`}>
-                                        <PaginationLink className="hover:bg-[#30A1EF] hover:text-[#F2F2F2]">
-                                            {page}
-                                        </PaginationLink>
-                                    </Link>
-                                    )}
-                                </PaginationItem>
-                                ))}
-
-                                {/* Last page + ellipsis */}
-                                {employees.current_page < employees.last_page - 2 && (
-                                <>
-                                    <PaginationItem>
-                                        <PaginationEllipsis />
-                                    </PaginationItem>
-                                    <PaginationItem>
-                                        <Link href={`?page=${employees.last_page}`}>
-                                            <PaginationLink>{employees.last_page}</PaginationLink>
-                                        </Link>
-                                    </PaginationItem>
-                                </>
-                                )}
-
-                                {/* Next */}
-                                <PaginationItem>
-                                    {employees.next_page_url ? (
-                                        <Link href={employees.next_page_url}>
-                                            <PaginationNext className="hover:bg-[#30A1EF] hover:text-[#F2F2F2]" />
-                                        </Link>
-                                    ) : (
-                                        <PaginationNext disabled className="opacity-50 hover:bg-transparent"/>
-                                    )}
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
+                        <PaginationNav data={employees} />
                     </div>
                 </div>
 

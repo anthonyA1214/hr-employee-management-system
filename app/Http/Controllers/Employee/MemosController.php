@@ -14,8 +14,8 @@ class MemosController extends Controller
         $user = $request->user();
 
         $memosData = $user->receivedMemos()
-        ->get()
-        ->map(function ($memo) {
+        ->paginate(10)
+        ->through(function ($memo) {
             return [
                 'id' => $memo->id,
                 'subject' => $memo->subject,
