@@ -6,6 +6,7 @@ import { router } from "@inertiajs/react";
 import DataTable from "@/components/DataTable";
 import { toast } from "sonner"
 import { Spinner } from "@/components/ui/spinner";
+import PaginationNav from "@/components/PaginationNav";
 
 const timekeepingColumns = [
     { key: "date", label: "Date" },
@@ -127,7 +128,18 @@ export default function TimekeepingPage({ timekeeping, timekeepingData }) {
                         </CardContent>
                     </Card>
                 </div>
-                <DataTable columns={timekeepingColumns} data={timekeepingData} />
+                <DataTable columns={timekeepingColumns} data={timekeepingData.data} />
+                <div className="flex justify-between items-center mt-4">
+                    <div>
+                        <span className="text-sm opacity-50">
+                            Showing {timekeepingData.from} to {timekeepingData.to} of {timekeepingData.total} timekeeping records
+                        </span>
+                    </div>
+
+                    <div className="select-none">
+                        <PaginationNav data={timekeepingData} />
+                    </div>
+                </div>
             </div>
         </>
     );

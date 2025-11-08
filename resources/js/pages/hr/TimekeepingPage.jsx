@@ -8,7 +8,9 @@ import {
 } from "@/components/ui/input-group";
 import DataTable from "@/components/DataTable";
 import Layout from "@/layouts/Layout";
-import { useState, useMemo } from "react";
+import { useState } from "react";
+import { router } from "@inertiajs/react";
+import PaginationNav from "@/components/PaginationNav";
 
 const timekeepingColumns = [
     { key: "name", label: "Name" },
@@ -21,13 +23,12 @@ const timekeepingColumns = [
 ];
 
 export default function TimekeepingPage({ timekeepingData }) {
-    const [searchQuery, setSearchQuery] = useState("");
+    const [query, setQuery] = useState(timekeepingData?.search || "");
 
-    const filteredTimekeepingData = useMemo(() => {
-        return timekeepingData.filter((record) =>
-            record.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    }, [timekeepingData, searchQuery]);
+    const handleSearch = (e) => {
+        e.preventDefault();
+        router.get("/hr/timekeeping", { query }, { preserveState: true, replace: true });
+    };
 
     return (
         <>
@@ -41,8 +42,13 @@ export default function TimekeepingPage({ timekeepingData }) {
                             name="query"
                             type="text"
                             placeholder="Search by name..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSearch(e);
+                                }
+                            }}
                         />
                         <InputGroupAddon>
                             <Search />
@@ -50,17 +56,29 @@ export default function TimekeepingPage({ timekeepingData }) {
                     </InputGroup>
 
                     <Button
-                        onClick={() => setSearchQuery("")}
                         className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]"
+                        onClick={handleSearch}
                     >
-                        Clear
+                        Search
                     </Button>
                 </div>
 
                 <DataTable
                     columns={timekeepingColumns}
-                    data={filteredTimekeepingData}
+                    data={timekeepingData.data}
                 />
+
+                <div className="flex justify-between items-center mt-4">
+                    <div>
+                        <span className="text-sm opacity-50">
+                            Showing {timekeepingData.from} to {timekeepingData.to} of {timekeepingData.total} timekeeping records
+                        </span>
+                    </div>
+
+                    <div className="select-none">
+                        <PaginationNav data={timekeepingData} />
+                    </div>
+                </div>
             </div>
         </>
     );

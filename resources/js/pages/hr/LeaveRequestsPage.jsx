@@ -6,6 +6,7 @@ import DataTable from "@/components/DataTable";
 import ApproveLeaveRequestDialog from "@/components/ApproveLeaveRequestDialog";
 import RejectLeaveRequestDialog from "@/components/RejectLeaveRequestDialog";
 import Layout from "@/layouts/Layout";
+import PaginationNav from "@/components/PaginationNav";
 
 const leaveRequestsColumns = [
     { key: "name", label: "Name" },
@@ -50,7 +51,7 @@ export default function LeaveRequestsPage({ leaveRequestsData }) {
 
                 <DataTable
                     columns={leaveRequestsColumns}
-                    data={leaveRequestsData}
+                    data={leaveRequestsData.data}
                     actions={(row) => (
                         <>
                             <Button
@@ -68,6 +69,18 @@ export default function LeaveRequestsPage({ leaveRequestsData }) {
                         </>
                     )}
                 />
+
+                <div className="flex justify-between items-center mt-4">
+                    <div>
+                        <span className="text-sm opacity-50">
+                            Showing {leaveRequestsData.from} to {leaveRequestsData.to} of {leaveRequestsData.total} leave requests
+                        </span>
+                    </div>
+
+                    <div className="select-none">
+                        <PaginationNav data={leaveRequestsData} />
+                    </div>
+                </div>
 
                 {approveLeaveRequest && (
                     <ApproveLeaveRequestDialog

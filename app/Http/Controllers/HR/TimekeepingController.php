@@ -10,12 +10,21 @@ use Inertia\Inertia;
 
 class TimekeepingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('query');
+
         $timekeepingData = Timekeeping::with('employee')
+        ->when($search, function ($query, $search) {
+            $query->whereHas('employee', function ($q) use ($search) {
+                $q->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%');
+            });
+        })
         ->orderBy('date', 'desc')
-        ->get()
-        ->map(function ($record) {
+        ->paginate(10)
+        ->withQueryString()
+        ->through(function ($record) {
             $record->name = $record->employee->last_name . ', ' . $record->employee->first_name;
 
             if ($record->time_in && $record->time_out) {

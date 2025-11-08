@@ -1,6 +1,7 @@
 import DataTable from "@/components/DataTable";
 import SubmitLeaveRequestDialog from "@/components/SubmitLeaveRequestDialog";
 import Layout from "@/layouts/Layout";
+import PaginationNav from "@/components/PaginationNav";
 
 const leaveRequestsColumns = [
     { key: "leave_type", label: "Leave Type" },
@@ -20,7 +21,19 @@ export default function LeaveRequestsPage({ leaveRequestsData }) {
                     <SubmitLeaveRequestDialog />
                 </div>
 
-                <DataTable columns={leaveRequestsColumns} data={leaveRequestsData} />
+                <DataTable columns={leaveRequestsColumns} data={leaveRequestsData.data} />
+
+                <div className="flex justify-between items-center mt-4">
+                    <div>
+                        <span className="text-sm opacity-50">
+                            Showing {leaveRequestsData.from} to {leaveRequestsData.to} of {leaveRequestsData.total} leave requests
+                        </span>
+                    </div>
+
+                    <div className="select-none">
+                        <PaginationNav data={leaveRequestsData} />
+                    </div>
+                </div>
             </div>
         </>
     );

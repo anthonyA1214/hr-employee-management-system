@@ -6,6 +6,7 @@ import DataTable from "@/components/DataTable";
 import SendMemoDialog from "@/components/SendMemoDialog";
 import ViewMemoDialog from "@/components/ViewMemoDialog";
 import Layout from "@/layouts/Layout";
+import PaginationNav from "@/components/PaginationNav";
 
 const memosColumns = [
     { key: "name", label: "Name" },
@@ -33,7 +34,7 @@ export default function MemosPage({ employees, memosData }) {
 
                 <DataTable 
                     columns={memosColumns} 
-                    data={memosData} 
+                    data={memosData.data} 
                     actions={(row) => (
                         <>
                             <Button
@@ -45,6 +46,18 @@ export default function MemosPage({ employees, memosData }) {
                         </>
                     )}  
                 />
+
+                <div className="flex justify-between items-center mt-4">
+                    <div>
+                        <span className="text-sm opacity-50">
+                            Showing {memosData.from} to {memosData.to} of {memosData.total} memos
+                        </span>
+                    </div>
+
+                    <div className="select-none">
+                        <PaginationNav data={memosData} />
+                    </div>
+                </div>
 
                 {viewMemo && (
                     <ViewMemoDialog

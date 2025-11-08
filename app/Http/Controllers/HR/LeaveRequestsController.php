@@ -13,8 +13,8 @@ class LeaveRequestsController extends Controller
     {
         $leaveRequestsData = Leave::with('employee')
         ->where('status', 'pending')
-        ->get()
-        ->map(function ($leave) {
+        ->paginate(10)
+        ->through(function ($leave) {
             return [
                 'id' => $leave->id,
                 'first_name' => $leave->employee->first_name,
