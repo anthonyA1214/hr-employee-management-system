@@ -12,8 +12,8 @@ class MemosController extends Controller
 {
     public function index()
     {
-        $employees = User::select('id', 'first_name', 'last_name')
-        ->where('role', 'employee')
+        $employees = User::where('role', 'employee')
+        ->orderBy('last_name', 'asc')
         ->get()
         ->map(function ($employee) {
             return [

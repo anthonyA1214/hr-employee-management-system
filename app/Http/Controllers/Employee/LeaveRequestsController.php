@@ -37,24 +37,39 @@ class LeaveRequestsController extends Controller
         $validatedAttributes = $request->validate([
             'leave_type' => ['required', 'string', 'max:100'],
             'start_date' => ['nullable', 'date', 'after_or_equal:today'],
+            'end_date' => ['nullable', 'date'], // we'll validate manually for vacation_leave
             'reason' => ['nullable', 'string', 'max:500'],
         ]);
 
         $days = match ($validatedAttributes['leave_type']) {
             'sick_leave' => 1,
-            'vacation_leave' => 1,
-            'maternity_leave' => 65,
+            'maternity_leave' => 105,
             'paternity_leave' => 7,
             'emergency_leave' => 3,
+            'vacation_leave' => null, // will calculate from dates
             default => 1,
         };
 
         $startDate = $validatedAttributes['start_date'] ? Carbon::parse($validatedAttributes['start_date']) : Carbon::tomorrow();
-        $endDate = $startDate->copy()->addDays($days - 1);
 
-        $user = $request->user();  
-        
-        $status = $validatedAttributes['leave_type'] === 'vacation_leave' ? 'pending' : 'approved';
+        if ($validatedAttributes['leave_type'] === 'vacation_leave') {
+            if (!empty($validatedAttributes['end_date'])) {
+                $endDate = Carbon::parse($validatedAttributes['end_date']);
+                if ($endDate->lt($startDate)) {
+                    return redirect()->back()->withErrors(['end_date' => 'End date cannot be before start date.']);
+                }
+                $days = $startDate->diffInDays($endDate) + 1; // include start date
+            } else {
+                $endDate = $startDate->copy(); // default to 1 day if end_date not provided
+                $days = 1;
+            }
+            $status = 'pending';
+        } else {
+            $endDate = $startDate->copy()->addDays($days - 1);
+            $status = 'approved';
+        }
+
+        $user = $request->user();
 
         $user->leaves()->create([
             ...$validatedAttributes,

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->date('period_start');
             $table->date('period_end');
             $table->decimal('basic_salary', 10, 2)->default(0);
-            $table->decimal('overtime_pay', 10, 2)->default(0);
             $table->decimal('deductions', 10, 2)->default(0);
             $table->decimal('tax_percentage', 5, 2)->default(0);
             $table->decimal('net_pay', 10, 2)->default(0);

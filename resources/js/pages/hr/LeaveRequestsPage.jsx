@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, X } from "lucide-react";
+import { Check, StickyNote, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import DataTable from "@/components/DataTable";
@@ -7,6 +7,7 @@ import ApproveLeaveRequestDialog from "@/components/ApproveLeaveRequestDialog";
 import RejectLeaveRequestDialog from "@/components/RejectLeaveRequestDialog";
 import Layout from "@/layouts/Layout";
 import PaginationNav from "@/components/PaginationNav";
+import ViewReasonDialog from "@/components/ViewReasonDialog";
 
 const leaveRequestsColumns = [
     { key: "name", label: "Name" },
@@ -23,6 +24,13 @@ export default function LeaveRequestsPage({ leaveRequestsData }) {
     const [rejectLeaveRequest, setRejectLeaveRequest] = useState(null);
     const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
     const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+    const [viewReason, setViewReason] = useState(null);
+    const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+
+    const openViewDialog = (memo) => {
+        setViewReason(memo);
+        setIsViewDialogOpen(true);
+    };
 
     const openApproveDialog = (leaveRequest) => {
         setApproveLeaveRequest(leaveRequest);
@@ -55,6 +63,12 @@ export default function LeaveRequestsPage({ leaveRequestsData }) {
                     actions={(row) => (
                         <>
                             <Button
+                                onClick={() => openViewDialog(row)}
+                                className="bg-transparent text-[#008DEE] hover:bg-[#E3F2FD] hover:text-[#006BBF] active:bg-[#BBDEFB]"
+                            >
+                                <StickyNote />
+                            </Button>
+                            <Button
                                 onClick={() => openApproveDialog(row)}
                                 className="bg-transparent text-[#41D56D] hover:bg-[#E6F9F0] hover:text-[#1B5E34] active:bg-[#C8F2D9]"
                             >
@@ -81,6 +95,14 @@ export default function LeaveRequestsPage({ leaveRequestsData }) {
                         <PaginationNav data={leaveRequestsData} />
                     </div>
                 </div>
+
+                {viewReason && (
+                    <ViewReasonDialog
+                        open={isViewDialogOpen}
+                        onOpenChange={setIsViewDialogOpen}
+                        leave={viewReason}
+                    />
+                )}
 
                 {approveLeaveRequest && (
                     <ApproveLeaveRequestDialog

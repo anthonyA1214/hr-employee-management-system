@@ -13,7 +13,6 @@ const timekeepingColumns = [
     { key: "time_in", label: "Time In" },
     { key: "time_out", label: "Time Out" },
     { key: "late_minutes", label: "Late Minutes" },
-    { key: "overtime_minutes", label: "Overtime Minutes" },
     { key: "total_hours", label: "Total Hours Worked" },
 ];
 

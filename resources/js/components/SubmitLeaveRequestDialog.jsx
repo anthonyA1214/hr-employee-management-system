@@ -32,10 +32,11 @@ export default function SubmitLeaveRequestDialog() {
     const { data, setData, post, processing, errors, reset } = useForm({
         leave_type: "",
         start_date: "",
+        end_date: "",
         reason: "",
     });
 
-    const isStartDateDisabled = data.leave_type !== "vacation_leave";
+    const isDateDisabled = data.leave_type !== "vacation_leave";
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -100,28 +101,53 @@ export default function SubmitLeaveRequestDialog() {
                         )}
                     </div>
 
-                    {/* Start Date */}
-                    <div className="flex flex-col gap-y-2">
-                        <Label htmlFor="start_date">Start Date</Label>
-                        <Input 
-                            id="start_date" 
-                            type="date" 
-                            disabled={isStartDateDisabled}
-                            value={data.start_date}
-                            onChange={(e) => setData("start_date", e.target.value)}
-                            required={!isStartDateDisabled}
-                        />
-                        {isStartDateDisabled && (
-                            <span className="text-sm opacity-50">
-                                Only available for vacation leave.
-                            </span>
-                        )}
-                        {errors.start_date && (
-                            <span className="text-sm text-red-500">
-                                {errors.start_date}
-                            </span>
-                        )}
-                    </div>  
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* Start Date */}
+                        <div className="flex flex-col gap-y-2">
+                            <Label htmlFor="start_date">Start Date</Label>
+                            <Input 
+                                id="start_date" 
+                                type="date" 
+                                disabled={isDateDisabled}
+                                value={data.start_date}
+                                onChange={(e) => setData("start_date", e.target.value)}
+                                required={!isDateDisabled}
+                            />
+                            {isDateDisabled && (
+                                <span className="text-sm opacity-50">
+                                    Only available for vacation leave.
+                                </span>
+                            )}
+                            {errors.start_date && (
+                                <span className="text-sm text-red-500">
+                                    {errors.start_date}
+                                </span>
+                            )}
+                        </div>
+
+                        {/* End Date */}
+                        <div className="flex flex-col gap-y-2">
+                            <Label htmlFor="end_date">End Date</Label>
+                            <Input 
+                                id="end_date" 
+                                type="date" 
+                                disabled={isDateDisabled}
+                                value={data.end_date}
+                                onChange={(e) => setData("end_date", e.target.value)}
+                                required={!isDateDisabled}
+                            />
+                            {isDateDisabled && (
+                                <span className="text-sm opacity-50">
+                                    Only available for vacation leave.
+                                </span>
+                            )}
+                            {errors.end_date && (
+                                <span className="text-sm text-red-500">
+                                    {errors.end_date}
+                                </span>
+                            )}
+                        </div>
+                    </div>        
 
                     {/* Reason */}
                     <div className="flex flex-col gap-y-2 w-full">
