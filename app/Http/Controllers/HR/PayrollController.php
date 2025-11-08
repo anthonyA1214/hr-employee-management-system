@@ -15,8 +15,8 @@ class PayrollController extends Controller
     {
         $search = $request->input('query');
 
-        $employees = User::select('id', 'first_name', 'last_name')
-        ->where('role', 'employee')
+        $employees = User::where('role', 'employee')
+        ->orderBy('last_name', 'asc')
         ->get()
         ->map(function ($employee) {
             return [
@@ -43,7 +43,6 @@ class PayrollController extends Controller
                 'period_start' => $payroll->period_start,
                 'period_end' => $payroll->period_end,
                 'basic_salary' => $payroll->basic_salary,
-                'overtime_pay' => $payroll->overtime_pay,
                 'deductions' => $payroll->deductions,
                 'tax_percentage' => $payroll->tax_percentage,
                 'net_pay' => $payroll->net_pay,
@@ -61,7 +60,7 @@ class PayrollController extends Controller
         $validated = $request->validate([
             'employee_id' => 'required|exists:users,id',
             'period_start' => 'required|date',
-            'basic_salary' => 'required|numeric|min:0',
+            'basic_salary' => 'required|numeric|min:17000',
         ]);
 
         $periodStart = Carbon::parse($validated['period_start']);
@@ -73,31 +72,44 @@ class PayrollController extends Controller
         $payPerMinute = $payPerHour / 60;
 
         $user = User::find($validated['employee_id']);
-        $overtimeMinutes = $user->timekeepings()
-        ->whereBetween('date', [$periodStart->toDateString(), $periodEnd->toDateString()])
-        ->sum('overtime_minutes');
+
         $lateMinutes = $user->timekeepings()
         ->whereBetween('date', [$periodStart->toDateString(), $periodEnd->toDateString()])
         ->sum('late_minutes');
 
-        $overtimePay = $overtimeMinutes * $payPerMinute;
-
         $SSS = $validated['basic_salary'] * 0.0363;
         $PhilHealth = $validated['basic_salary'] * 0.03;
         $PagIbig = $validated['basic_salary'] * 0.02;
-        $withholdingTax = $validated['basic_salary'] * 0.1;
+        $withholdingTax = 0;
+
+        if ($validated['basic_salary'] > 20388 && $validated['basic_salary'] <= 33333) {
+            $excess = $validated['basic_salary'] - 20388;
+            $withholdingTax = $excess * 0.15;
+        } elseif ($validated['basic_salary'] > 33333 && $validated['basic_salary'] <= 66667) {
+            $excess = $validated['basic_salary'] - 33333;
+            $withholdingTax = $excess * 0.20;
+        } elseif ($validated['basic_salary'] > 66667 && $validated['basic_salary'] <= 166667) {
+            $excess = $validated['basic_salary'] - 66667;
+            $withholdingTax = $excess * 0.25;
+        } elseif ($validated['basic_salary'] > 166667 && $validated['basic_salary'] <= 666667) {
+            $excess = $validated['basic_salary'] - 166667;
+            $withholdingTax = $excess * 0.30;
+        } elseif ($validated['basic_salary'] > 666667) {
+            $excess = $validated['basic_salary'] - 666667;
+            $withholdingTax = $excess * 0.35;
+        }
+
         $lateDeductions = $lateMinutes * $payPerMinute;
 
         $totalDeductions = $SSS + $PhilHealth + $PagIbig + $withholdingTax + $lateDeductions;
 
-        $netPay = $validated['basic_salary'] + $overtimePay - $totalDeductions;
+        $netPay = $validated['basic_salary'] - $totalDeductions;
 
         Payroll::create([
             'employee_id' => $validated['employee_id'],
             'period_start' => $periodStart->toDateString(),
             'period_end' => $periodEnd->toDateString(),
             'basic_salary' => $validated['basic_salary'],
-            'overtime_pay' => $overtimePay,
             'deductions' => $totalDeductions,
             'tax_percentage' => 10,
             'net_pay' => $netPay,

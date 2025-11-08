@@ -14,18 +14,18 @@ function formatDate(dateString) {
     });
 }
 
-export default function ViewMemoDialog({ open, onOpenChange, memo }) {
+export default function ViewReasonDialog({ open, onOpenChange, leave }) {
     return (
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogContent className="max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle className="text-2xl">
-                            {memo.subject}
+                            {leave.leave_type}
                         </DialogTitle>
                     </DialogHeader>
-                    <p><span className="font-medium">Date:</span> {formatDate(memo.sent_at)}</p>
-                    <p className="mt-8 whitespace-pre-line max-h-80 overflow-y-auto">{memo.body}</p>
+                    <p><span className="font-medium">Date:</span> {formatDate(leave.start_date)} - {formatDate(leave.end_date)}</p>
+                    <p className="mt-8 whitespace-pre-line max-h-80 overflow-y-auto">{leave.reason}</p>
                 </DialogContent>
             </Dialog>
         </>

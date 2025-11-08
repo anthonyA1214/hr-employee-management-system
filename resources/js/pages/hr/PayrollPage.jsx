@@ -20,7 +20,6 @@ const payrollColumns = [
     { key: "period_start", label: "Period Start" },
     { key: "period_end", label: "Period End" },
     { key: "basic_salary", label: "Basic Salary" },
-    { key: "overtime_pay", label: "Overtime Pay" },
     { key: "deductions", label: "Deductions" },
     { key: "tax_percentage", label: "Tax Percentage" },
     { key: "net_pay", label: "Net Pay" },

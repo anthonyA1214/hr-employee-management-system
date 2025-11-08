@@ -17,7 +17,7 @@ function getStatus(status) {
         case "Inactive":
             return "bg-[#FF952B]";
 
-         case "Rejected":
+            case "Rejected":
             return "bg-[#C62828]";
     }
 }

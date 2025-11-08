@@ -15,7 +15,7 @@ const payrollColumns = [
 export default function PayrollPage({ payrollData }) {
     return (
         <>
-            <div className="flex flex-col gap-y-8">
+            <div className="space-y-4">
                 <h1 className="text-3xl font-bold">Payroll</h1>
 
                 <DataTable columns={payrollColumns} data={payrollData.data} />
