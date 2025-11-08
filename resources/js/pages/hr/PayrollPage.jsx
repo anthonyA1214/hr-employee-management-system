@@ -11,7 +11,7 @@ import DataTable from "@/components/DataTable";
 import Layout from "@/layouts/Layout";
 import SendPayrollRecordDialog from "@/components/SendPayrollRecordDialog";
 import DeletePayrollRecordDialog from "@/components/DeletePayrollRecordDialog";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 const payrollColumns = [
     { key: "name", label: "Name" },
@@ -25,6 +25,8 @@ const payrollColumns = [
 ];
 
 export default function PayrollPage({ employees, payrollData }) {
+    const [searchQuery, setSearchQuery] = useState("");
+
     const [sendPayrollEmployee, setSendPayrollEmployee] = useState(null);
     const [deletePayrollEmployee, setDeletePayrollEmployee] = useState(null);
     const [isSendPayrollDialogOpen, setIsSendPayrollDialogOpen] = useState(false);
@@ -50,6 +52,12 @@ export default function PayrollPage({ employees, payrollData }) {
         setIsDeletePayrollDialogOpen(false);
     };
 
+    const filteredPayrollData = useMemo(() => {
+        return payrollData.filter((payroll) =>
+            payroll.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [payrollData, searchQuery]);
+
     return (
         <>
             <div className="space-y-4">
@@ -65,6 +73,8 @@ export default function PayrollPage({ employees, payrollData }) {
                             name="query"
                             type="text"
                             placeholder="Search by name..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <InputGroupAddon>
                             <Search />
@@ -72,16 +82,16 @@ export default function PayrollPage({ employees, payrollData }) {
                     </InputGroup>
 
                     <Button
-                        type="submit"
+                        onClick={() => setSearchQuery("")}
                         className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]"
                     >
-                        Search
+                        Clear
                     </Button>
                 </div>
 
                 <DataTable
                     columns={payrollColumns}
-                    data={payrollData}
+                    data={filteredPayrollData}
                     actions={(row) => (
                         <>
                             <Button

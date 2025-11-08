@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/input-group";
 import DataTable from "@/components/DataTable";
 import Layout from "@/layouts/Layout";
-
+import { useState, useMemo } from "react";
 
 const timekeepingColumns = [
     { key: "name", label: "Name" },
@@ -21,6 +21,14 @@ const timekeepingColumns = [
 ];
 
 export default function TimekeepingPage({ timekeepingData }) {
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const filteredTimekeepingData = useMemo(() => {
+        return timekeepingData.filter((record) =>
+            record.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [timekeepingData, searchQuery]);
+
     return (
         <>
             <div className="space-y-4">
@@ -33,6 +41,8 @@ export default function TimekeepingPage({ timekeepingData }) {
                             name="query"
                             type="text"
                             placeholder="Search by name..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <InputGroupAddon>
                             <Search />
@@ -40,16 +50,16 @@ export default function TimekeepingPage({ timekeepingData }) {
                     </InputGroup>
 
                     <Button
-                        type="submit"
+                        onClick={() => setSearchQuery("")}
                         className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]"
                     >
-                        Search
+                        Clear
                     </Button>
                 </div>
 
                 <DataTable
                     columns={timekeepingColumns}
-                    data={timekeepingData}
+                    data={filteredTimekeepingData}
                 />
             </div>
         </>

@@ -25,7 +25,7 @@ export default function ViewMemoDialog({ open, onOpenChange, memo }) {
                         </DialogTitle>
                     </DialogHeader>
                     <p><span className="font-medium">Date:</span> {formatDate(memo.sent_at)}</p>
-                    <p className="mt-8 whitespace-pre-line max-h-60 overflow-y-auto">{memo.body}</p>
+                    <p className="mt-8 whitespace-pre-line max-h-80 overflow-y-auto">{memo.body}</p>
                 </DialogContent>
             </Dialog>
         </>
