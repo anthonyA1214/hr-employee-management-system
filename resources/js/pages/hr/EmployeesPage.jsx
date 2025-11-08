@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PenSquare, Search, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,9 @@ const employeeColumns = [
 ];
 
 export default function EmployeesPage({ employees }) {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filterBy, setFilterBy] = useState("name");
+
     const [editEmployee, setEditEmployee] = useState(null);
     const [deleteEmployee, setDeleteEmployee] = useState(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -59,6 +62,14 @@ export default function EmployeesPage({ employees }) {
         setIsDeleteDialogOpen(false);
     };
 
+    const filteredEmployees = useMemo(() => {
+        return employees.filter((employee) =>
+            employee[filterBy]
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase())
+        );
+    }, [employees, searchQuery, filterBy]);
+
     return (
         <>
             <div className="space-y-4">
@@ -74,40 +85,42 @@ export default function EmployeesPage({ employees }) {
                             name="query"
                             type="text"
                             placeholder="Search by name, email, or department..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <InputGroupAddon>
                             <Search />
                         </InputGroupAddon>
                     </InputGroup>
 
-                    <Select defaultValue="all">
+                    <Select defaultValue="name" value={filterBy} onValueChange={setFilterBy}>
                         <SelectTrigger className="w-[150px]">
                             <SelectValue placeholder="Filter by" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
                                 <SelectLabel>Filter by</SelectLabel>
-                                <SelectItem value="all">All</SelectItem>
                                 <SelectItem value="name">Name</SelectItem>
                                 <SelectItem value="email">Email</SelectItem>
-                                <SelectItem value="department">
-                                    Department
-                                </SelectItem>
+                                <SelectItem value="department">Department</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
 
                     <Button
-                        type="submit"
+                        onClick={() => {
+                            setSearchQuery("");
+                            setFilterBy("name");
+                        }}
                         className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]"
                     >
-                        Search
+                        Clear
                     </Button>
                 </div>
 
                 <DataTable
                     columns={employeeColumns}
-                    data={employees}
+                    data={filteredEmployees}
                     actions={(row) => (
                         <>
                             <Button
