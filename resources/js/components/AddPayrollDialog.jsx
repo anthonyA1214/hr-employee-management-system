@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { useForm } from "@inertiajs/react";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function AddPayrollDialog({ employees }) {
     const [open, setOpen] = useState(false);
@@ -116,8 +117,15 @@ export default function AddPayrollDialog({ employees }) {
                         <Button
                             type="submit"
                             className="bg-[#018CEF] hover:bg-[#30A1EF] active:bg-[#5DB1EB]"
+                            disabled={processing}
                         >
-                            Create
+                            {processing ? (
+                                <>
+                                    <Spinner /> Creating...
+                                </>
+                            ) : (
+                                "Create"
+                            )}
                         </Button>
                     </DialogFooter>
                 </form>

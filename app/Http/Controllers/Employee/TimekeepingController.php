@@ -55,7 +55,7 @@ class TimekeepingController extends Controller
         $time = $request->input('time');
 
         $timeIn = Carbon::createFromFormat('H:i:s', $time);
-        $cutOff = Carbon::createFromTime(8, 10, 0); // 8:10 AM
+        $cutOff = Carbon::createFromTime(8, 0, 0); // 8:00 AM
 
         $existing = $user->timekeepings()->where('date', $date)->first();
 
