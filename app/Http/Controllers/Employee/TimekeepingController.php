@@ -86,20 +86,11 @@ class TimekeepingController extends Controller
         $date = $request->input('date');
         $time = $request->input('time');
 
-        $timeOut = Carbon::createFromFormat('H:i:s', $time);
-        $cutOff = Carbon::createFromTime(17, 0, 0); // 5:00 PM
-
         $existing = $user->timekeepings()->where('date', $date)->first();
-
-        $overtimeMinutes = 0;
-        if ($timeOut->greaterThan($cutOff)) {
-            $overtimeMinutes = $cutOff->diffInMinutes($timeOut);
-        }
 
         if ($existing && !$existing->time_out) {
             $existing->update([
                 'time_out' => $time,
-                'overtime_minutes' => $overtimeMinutes,
             ]);
 
             return redirect()->back()->with('success', 'Time out recorded successfully.');

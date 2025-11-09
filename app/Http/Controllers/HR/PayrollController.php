@@ -77,9 +77,7 @@ class PayrollController extends Controller
         ->whereBetween('date', [$periodStart->toDateString(), $periodEnd->toDateString()])
         ->sum('late_minutes');
 
-        $SSS = $validated['basic_salary'] * 0.0363;
-        $PhilHealth = $validated['basic_salary'] * 0.03;
-        $PagIbig = $validated['basic_salary'] * 0.02;
+        $governmentTaxes = 2700; // Fixed amount for SSS, PhilHealth, Pag-IBIG
         $withholdingTax = 0;
 
         if ($validated['basic_salary'] > 20388 && $validated['basic_salary'] <= 33333) {
@@ -101,7 +99,7 @@ class PayrollController extends Controller
 
         $lateDeductions = $lateMinutes * $payPerMinute;
 
-        $totalDeductions = $SSS + $PhilHealth + $PagIbig + $withholdingTax + $lateDeductions;
+        $totalDeductions = $governmentTaxes + $withholdingTax + $lateDeductions;
 
         $netPay = $validated['basic_salary'] - $totalDeductions;
 
