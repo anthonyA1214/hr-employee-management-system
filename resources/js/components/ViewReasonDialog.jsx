@@ -24,7 +24,17 @@ export default function ViewReasonDialog({ open, onOpenChange, leave }) {
                             {leave.leave_type}
                         </DialogTitle>
                     </DialogHeader>
-                    <p><span className="font-medium">Date:</span> {formatDate(leave.start_date)} - {formatDate(leave.end_date)}</p>
+                    <div>
+                        {leave.name && (
+                            <p>
+                                <span className="font-medium">Name:</span> {leave.name}
+                            </p>
+                        )}
+                        <p>
+                            <span className="font-medium">Date:</span> {formatDate(leave.start_date)} - {formatDate(leave.end_date)}
+                        </p>
+                    </div>
+                    
                     <p className="mt-8 whitespace-pre-line max-h-80 overflow-y-auto">{leave.reason}</p>
                 </DialogContent>
             </Dialog>

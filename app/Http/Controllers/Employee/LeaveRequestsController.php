@@ -47,6 +47,8 @@ class LeaveRequestsController extends Controller
             'paternity_leave' => 7,
             'emergency_leave' => 3,
             'vacation_leave' => null, // will calculate from dates
+            'single_parent_leave' => 7,
+            'magna_carta_leave' => 60,
             default => 1,
         };
 

@@ -91,6 +91,12 @@ export default function SubmitLeaveRequestDialog() {
                                     <SelectItem value="emergency_leave">
                                         Emergency Leave
                                     </SelectItem>
+                                    <SelectItem value="single_parent_leave">
+                                        Single Parent Leave
+                                    </SelectItem>
+                                    <SelectItem value="magna_carta_leave">
+                                        Magna Carta Leave
+                                    </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
